@@ -176,7 +176,7 @@ const EquationGame: React.FC = () => {
         onClearSelection={handleClearSelection}
       />
 
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
           🧮 Gioco delle Equazioni (AST)
         </h1>

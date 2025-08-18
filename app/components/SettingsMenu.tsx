@@ -61,18 +61,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             <input
               type="range"
               min="1"
-              max="5"
+              max="10"
               value={variablesCount}
               onChange={(e) => onVariablesChange(parseInt(e.target.value))}
               className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-purple"
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-              <span>5</span>
-            </div>
           </div>
 
           {/* Slider per costanti */}
@@ -83,18 +76,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             <input
               type="range"
               min="1"
-              max="5"
+              max="10"
               value={constantsCount}
               onChange={(e) => onConstantsChange(parseInt(e.target.value))}
               className="w-full h-2 bg-yellow-200 rounded-lg appearance-none cursor-pointer slider-yellow"
             />
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>1</span>
-              <span>2</span>
-              <span>3</span>
-              <span>4</span>
-              <span>5</span>
-            </div>
           </div>
 
           <p className="text-xs text-gray-500 italic">

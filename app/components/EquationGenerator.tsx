@@ -37,7 +37,7 @@ const combineNodes = (nodes: ASTNode[]): ASTNode => {
   let result = nodes[0];
   for (let i = 1; i < nodes.length; i++) {
     // Alterna tra + e - per rendere le equazioni più interessanti
-    const operator = Math.random() > 0.3 ? '+' : '-';
+    const operator = '+';
     result = createBinaryOp(operator, result, nodes[i]);
   }
   
@@ -48,9 +48,13 @@ const combineNodes = (nodes: ASTNode[]): ASTNode => {
 export const generateEquation = (params?: EquationParams): Equation => {
   const { variablesCount = 1, constantsCount = 1 } = params || {};
   
+  let alpha = Math.floor(Math.random()*variablesCount);
+  let beta = Math.floor(Math.random()*constantsCount);
+  
+
   // Genera nodi per il lato sinistro
-  const leftVariables = generateRandomNodes(variablesCount, 'variable');
-  const leftConstants = generateRandomNodes(constantsCount, 'constant');
+  const leftVariables = generateRandomNodes(alpha, 'variable');
+  const leftConstants = generateRandomNodes(beta, 'constant');
   const leftNodes = [...leftVariables, ...leftConstants];
   
   // Mescola i nodi per un ordine casuale
@@ -60,8 +64,8 @@ export const generateEquation = (params?: EquationParams): Equation => {
   }
   
   // Genera nodi per il lato destro
-  const rightVariables = generateRandomNodes(variablesCount, 'variable');
-  const rightConstants = generateRandomNodes(constantsCount, 'constant');
+  const rightVariables = generateRandomNodes(variablesCount - alpha, 'variable');
+  const rightConstants = generateRandomNodes(constantsCount - beta, 'constant');
   const rightNodes = [...rightVariables, ...rightConstants];
   
   // Mescola i nodi per un ordine casuale
@@ -71,6 +75,15 @@ export const generateEquation = (params?: EquationParams): Equation => {
   }
   
   // Combina i nodi in AST
+  if(leftNodes.length === 0){
+    leftNodes.push(rightNodes[rightNodes.length-1]);
+    rightNodes.pop();
+  }
+
+  if(rightNodes.length === 0){
+    rightNodes.push(rightNodes[rightNodes.length-1]);
+    leftNodes.pop();
+  }
   const leftSide = combineNodes(leftNodes);
   const rightSide = combineNodes(rightNodes);
   
