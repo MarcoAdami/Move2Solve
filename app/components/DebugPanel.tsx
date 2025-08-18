@@ -14,7 +14,7 @@ export const DebugPanel: React.FC<DebugPanelProps> = ({ equation }) => {
     if (node.type === "binary_op") {
       printTree(node.right, prefix + (isLeft ? "│   " : "    "), false, output);
     }
-      output.push(prefix + (isLeft ? "└── " : "┌── ") + (node.type === 'binary_op' ? node.operator : node.coefficient));
+      output.push(prefix + (isLeft ? "└── " : "┌── ") + (node.type === 'binary_op' ? node.operator : node.coefficient) + (node.type === 'variable' ? 'x' : ''));
 
     if (node.type === "binary_op") {
       printTree(
