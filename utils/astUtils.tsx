@@ -54,13 +54,13 @@ export const changeSign = (node: ASTNode): ASTNode => {
 };
 
 // Trova tutti i nodi foglia (trascinabili) di un AST
-export const getLeafNodes = (node: ASTNode, path: string[] = []): LeafNode[] => {
+export const getLeafNodes = (node: ASTNode): LeafNode[] => {
   if (node.type === 'variable' || node.type === 'constant') {
-    return [{ node, path }];
+    return [{ node}];
   } else {
     return [
-      ...getLeafNodes(node.left, [...path, 'left']),
-      ...getLeafNodes(node.right, [...path, 'right'])
+      ...getLeafNodes(node.left),
+      ...getLeafNodes(node.right)
     ];
   }
 };

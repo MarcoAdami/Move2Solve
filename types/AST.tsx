@@ -16,7 +16,6 @@ export interface DraggedNode {
 
 export interface LeafNode {
   node: ASTNode;
-  path: string[];
 }
 
 export type Side = 'left' | 'right';
