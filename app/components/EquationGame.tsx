@@ -1,223 +1,94 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 
-// Definizione dell'Abstract Syntax Tree
-type ASTNode = 
-  | { type: 'variable'; name: string; coefficient: number; id: string }
-  | { type: 'constant'; value: number; id: string }
-  | { type: 'binary_op'; operator: '+' | '-'; left: ASTNode; right: ASTNode; id: string };
+// Import dei tipi
+import { Equation, DraggedNode, ASTNode, Side } from '@/types/AST';
 
-interface Equation {
-  left: ASTNode;
-  right: ASTNode;
-}
+// Import delle utilità 
+import { 
+  changeSign, 
+  getLeafNodes, 
+  addNodeToAST, 
+  createBinaryOp 
+} from '@/utils/astUtils';
 
-interface DraggedNode {
+// Import della logica di gioco
+import { generateEquation } from './EquationGenerator';
+import { checkWin } from './GameLogic';
+
+// Import dei componenti
+import { EquationSide } from './EquationSide';
+import { WinMessage } from './WinMessage';
+import { GameInstructions } from './GameInstructions';
+import { DebugPanel } from './DebugPanel';
+import { SettingsMenu } from './SettingsMenu';
+import { SelectionPanel } from './SelectionPanel';
+
+// Interfacce per la selezione
+interface SelectedNode {
   node: ASTNode;
-  parentPath: string[];
-  side: 'left' | 'right';
+  side: Side;
 }
 
 const EquationGame: React.FC = () => {
   const [equation, setEquation] = useState<Equation | null>(null);
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
   const [gameWon, setGameWon] = useState(false);
-
-  // Genera un ID univoco
-  const generateId = (): string => `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-
-  // Crea un nodo variabile
-  const createVariable = (coefficient: number): ASTNode => ({
-    type: 'variable',
-    name: 'x',
-    coefficient,
-    id: generateId()
-  });
-
-  // Crea un nodo costante
-  const createConstant = (value: number): ASTNode => ({
-    type: 'constant',
-    value,
-    id: generateId()
-  });
-
-  // Crea un nodo operazione binaria
-  const createBinaryOp = (operator: '+' | '-', left: ASTNode, right: ASTNode): ASTNode => ({
-    type: 'binary_op',
-    operator,
-    left,
-    right,
-    id: generateId()
-  });
-
-  // Genera una nuova equazione casuale
-  const generateEquation = (): Equation => {
-    // Lato sinistro: ax + b
-    const leftCoeff = Math.floor(Math.random() * 5) + 1;
-    const leftConst = Math.floor(Math.random() * 10) - 5;
-    
-    const leftVariable = createVariable(leftCoeff);
-    const leftConstant = createConstant(leftConst);
-    const leftSide = leftConst >= 0 
-      ? createBinaryOp('+', leftVariable, leftConstant)
-      : createBinaryOp('-', leftVariable, createConstant(Math.abs(leftConst)));
-
-    // Lato destro: cx + d
-    const rightCoeff = Math.floor(Math.random() * 5) + 1;
-    const rightConst = Math.floor(Math.random() * 10) - 5;
-    
-    const rightVariable = createVariable(rightCoeff);
-    const rightConstant = createConstant(rightConst);
-    const rightSide = rightConst >= 0
-      ? createBinaryOp('+', rightVariable, rightConstant)
-      : createBinaryOp('-', rightVariable, createConstant(Math.abs(rightConst)));
-
-    return { left: leftSide, right: rightSide };
-  };
+  
+  // Stati per le impostazioni
+  const [variablesCount, setVariablesCount] = useState(1);
+  const [constantsCount, setConstantsCount] = useState(1);
+  
+  // Stati per la selezione
+  const [selectedNodes, setSelectedNodes] = useState<SelectedNode[]>([]);
 
   // Inizializza il gioco
   useEffect(() => {
-    setEquation(generateEquation());
+    setEquation(generateEquation({ variablesCount, constantsCount }));
   }, []);
 
-  // Clona un nodo AST
-  const cloneNode = (node: ASTNode): ASTNode => {
-    if (node.type === 'variable' || node.type === 'constant') {
-      return { ...node, id: generateId() };
-    } else {
-      return {
-        ...node,
-        id: generateId(),
-        left: cloneNode(node.left),
-        right: cloneNode(node.right)
-      };
-    }
-  };
-
-  // Cambia il segno di un nodo
-  const changeSign = (node: ASTNode): ASTNode => {
-    const cloned = cloneNode(node);
-    if (cloned.type === 'variable') {
-      return { ...cloned, coefficient: -cloned.coefficient };
-    } else if (cloned.type === 'constant') {
-      return { ...cloned, value: -cloned.value };
-    } else {
-      // Per operazioni binarie, cambiamo il segno del nodo radice
-      if (cloned.operator === '+') {
-        return { ...cloned, operator: '-' };
-      } else {
-        return { ...cloned, operator: '+' };
-      }
-    }
-  };
-
-  // Trova tutti i nodi foglia (trascinabili) di un AST
-  const getLeafNodes = (node: ASTNode, path: string[] = []): Array<{ node: ASTNode; path: string[] }> => {
-    if (node.type === 'variable' || node.type === 'constant') {
-      return [{ node, path }];
-    } else {
-      return [
-        ...getLeafNodes(node.left, [...path, 'left']),
-        ...getLeafNodes(node.right, [...path, 'right'])
-      ];
-    }
-  };
-
-  // Rimuove un nodo dall'AST dato il suo path
-  const removeNodeFromAST = (ast: ASTNode, targetPath: string[]): ASTNode | null => {
-    if (targetPath.length === 0) return null;
-    
-    if (targetPath.length === 1) {
-      // Siamo al penultimo livello
-      if (ast.type === 'binary_op') {
-        const direction = targetPath[0] as 'left' | 'right';
-        const otherDirection = direction === 'left' ? 'right' : 'left';
-        return ast[otherDirection];
-      }
-    }
-    
-    if (ast.type === 'binary_op') {
-      const [first, ...rest] = targetPath;
-      if (first === 'left') {
-        const newLeft = removeNodeFromAST(ast.left, rest);
-        return newLeft ? { ...ast, left: newLeft } : ast.right;
-      } else {
-        const newRight = removeNodeFromAST(ast.right, rest);
-        return newRight ? { ...ast, right: newRight } : ast.left;
-      }
-    }
-    
-    return ast;
-  };
-
-  // Aggiunge un nodo all'AST
-  const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
-    // Strategia semplice: aggiungiamo sempre con un'operazione +
-    return createBinaryOp('+', ast, newNode);
-  };
-
-  // Renderizza un nodo AST
-  const renderNode = (node: ASTNode, side: 'left' | 'right', isFirst: boolean = true): React.ReactNode => {
-    if (node.type === 'variable') {
-      const coeff = node.coefficient;
-      let display = '';
-      
-      if (coeff === 1) {
-        display = isFirst ? 'x' : '+x';
-      } else if (coeff === -1) {
-        display = '-x';
-      } else if (coeff > 0) {
-        display = isFirst ? `${coeff}x` : `+${coeff}x`;
-      } else {
-        display = `${coeff}x`;
-      }
-
-      return (
-        <span
-          key={node.id}
-          draggable
-          onDragStart={(e) => handleDragStart(e, node, [], side)}
-          className="bg-purple-200 hover:bg-purple-300 px-3 py-1 rounded cursor-move border border-purple-400 transition-colors inline-block mx-1"
-        >
-          {display}
-        </span>
-      );
-    } else if (node.type === 'constant') {
-      const value = node.value;
-      const display = isFirst ? `${value}` : value >= 0 ? `+${value}` : `${value}`;
-
-      return (
-        <span
-          key={node.id}
-          draggable
-          onDragStart={(e) => handleDragStart(e, node, [], side)}
-          className="bg-yellow-200 hover:bg-yellow-300 px-3 py-1 rounded cursor-move border border-yellow-400 transition-colors inline-block mx-1"
-        >
-          {display}
-        </span>
-      );
-    } else {
-      // binary_op
-      const leftRender = renderNode(node.left, side, isFirst);
-      const rightRender = renderNode(node.right, side, false);
-      
-      return (
-        <React.Fragment key={node.id}>
-          {leftRender}
-          {rightRender}
-        </React.Fragment>
-      );
-    }
-  };
-
   // Gestore drag start
-  const handleDragStart = (e: React.DragEvent, node: ASTNode, path: string[], side: 'left' | 'right') => {
+  const handleDragStart = (e: React.DragEvent, node: ASTNode, path: string[], side: Side) => {
     setDraggedNode({ node, parentPath: path, side });
     e.dataTransfer.effectAllowed = 'move';
   };
 
+  // Gestore selezione nodo
+  const handleNodeSelect = (node: ASTNode, side: Side) => {
+    setSelectedNodes(prevSelected => {
+      // Filtra le selezioni esistenti basandosi sulle regole
+      let newSelected = prevSelected.filter(selected => {
+        // Regola del tipo: se selezioniamo un tipo diverso, rimuovi l'altro tipo
+        if (selected.node.type !== node.type) {
+          return false;
+        }
+        
+        // Regola del lato: mantieni solo quelli dello stesso lato
+        return selected.side === side;
+      });
+
+      // Controlla se il nodo è già selezionato
+      const alreadySelected = newSelected.find(selected => selected.node.id === node.id);
+      
+      if (alreadySelected) {
+        // Se già selezionato, rimuovilo
+        newSelected = newSelected.filter(selected => selected.node.id !== node.id);
+      } else {
+        // Se non selezionato, aggiungilo
+        newSelected.push({ node, side });
+      }
+      
+      return newSelected;
+    });
+  };
+
+  // Funzione per pulire la selezione
+  const handleClearSelection = () => {
+    setSelectedNodes([]);
+  };
+
   // Gestore drop
-  const handleDrop = (e: React.DragEvent, targetSide: 'left' | 'right') => {
+  const handleDrop = (e: React.DragEvent, targetSide: Side) => {
     e.preventDefault();
     
     if (!draggedNode || !equation) return;
@@ -268,21 +139,6 @@ const EquationGame: React.FC = () => {
     e.preventDefault();
   };
 
-  // Controlla se il gioco è vinto
-  const checkWin = (eq: Equation): boolean => {
-    const leftLeaves = getLeafNodes(eq.left);
-    const rightLeaves = getLeafNodes(eq.right);
-    
-    const leftHasVariables = leftLeaves.some(leaf => leaf.node.type === 'variable');
-    const leftHasConstants = leftLeaves.some(leaf => leaf.node.type === 'constant');
-    const rightHasVariables = rightLeaves.some(leaf => leaf.node.type === 'variable');
-    const rightHasConstants = rightLeaves.some(leaf => leaf.node.type === 'constant');
-
-    // Vinto se le variabili sono tutte da una parte e le costanti dall'altra
-    return (leftHasVariables && !leftHasConstants && rightHasConstants && !rightHasVariables) ||
-           (rightHasVariables && !rightHasConstants && leftHasConstants && !leftHasVariables);
-  };
-
   // Controlla vittoria quando l'equazione cambia
   useEffect(() => {
     if (equation) {
@@ -290,15 +146,36 @@ const EquationGame: React.FC = () => {
     }
   }, [equation]);
 
+  // Nuova equazione con parametri attuali
   const newGame = () => {
-    setEquation(generateEquation());
+    setEquation(generateEquation({ variablesCount, constantsCount }));
     setGameWon(false);
+    setSelectedNodes([]); // Pulisce la selezione
+  };
+
+  // Ottieni gli ID dei nodi selezionati per evidenziare
+  const getSelectedNodeIds = (): string[] => {
+    return selectedNodes.map(selected => selected.node.id);
   };
 
   if (!equation) return <div>Caricamento...</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
+      {/* Menu delle impostazioni */}
+      <SettingsMenu
+        variablesCount={variablesCount}
+        constantsCount={constantsCount}
+        onVariablesChange={setVariablesCount}
+        onConstantsChange={setConstantsCount}
+      />
+
+      {/* Pannello selezione */}
+      <SelectionPanel
+        selectedNodes={selectedNodes}
+        onClearSelection={handleClearSelection}
+      />
+
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
           🧮 Gioco delle Equazioni (AST)
@@ -311,34 +188,33 @@ const EquationGame: React.FC = () => {
           
           <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
             {/* Lato sinistro */}
-            <div 
-              className="min-h-16 min-w-48 bg-blue-50 border-2 border-dashed border-blue-300 rounded-lg p-4 flex flex-wrap items-center justify-center"
-              onDrop={(e) => handleDrop(e, 'left')}
+            <EquationSide
+              ast={equation.left}
+              side="left"
+              selectedNodeIds={getSelectedNodeIds()}
+              onDrop={handleDrop}
               onDragOver={handleDragOver}
-            >
-              {renderNode(equation.left, 'left')}
-            </div>
+              onDragStart={handleDragStart}
+              onNodeSelect={handleNodeSelect}
+            />
 
             {/* Segno uguale */}
             <div className="text-3xl font-bold text-gray-600">=</div>
 
             {/* Lato destro */}
-            <div 
-              className="min-h-16 min-w-48 bg-green-50 border-2 border-dashed border-green-300 rounded-lg p-4 flex flex-wrap items-center justify-center"
-              onDrop={(e) => handleDrop(e, 'right')}
+            <EquationSide
+              ast={equation.right}
+              side="right"
+              selectedNodeIds={getSelectedNodeIds()}
+              onDrop={handleDrop}
               onDragOver={handleDragOver}
-            >
-              {renderNode(equation.right, 'right')}
-            </div>
+              onDragStart={handleDragStart}
+              onNodeSelect={handleNodeSelect}
+            />
           </div>
         </div>
 
-        {gameWon && (
-          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center">
-            <h3 className="text-xl font-bold">🎉 Complimenti! Hai risolto l'equazione!</h3>
-            <p>Tutte le variabili sono da una parte e le costanti dall'altra.</p>
-          </div>
-        )}
+        <WinMessage isVisible={gameWon} />
 
         <div className="text-center">
           <button
@@ -349,23 +225,9 @@ const EquationGame: React.FC = () => {
           </button>
         </div>
 
-        <div className="mt-8 bg-gray-50 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-gray-700 mb-3">Come giocare:</h3>
-          <ul className="text-gray-600 space-y-2">
-            <li>• <span className="bg-purple-200 px-2 py-1 rounded text-sm">Viola</span> = Variabili (x)</li>
-            <li>• <span className="bg-yellow-200 px-2 py-1 rounded text-sm">Giallo</span> = Costanti (numeri)</li>
-            <li>• Trascina i termini da un lato all'altro dell'equazione</li>
-            <li>• Il segno cambierà automaticamente quando sposti un termine</li>
-            <li>• Obiettivo: metti tutte le x da una parte e tutti i numeri dall'altra</li>
-          </ul>
-        </div>
+        <GameInstructions />
 
-        <div className="mt-4 bg-gray-100 rounded-lg p-4">
-          <h4 className="text-sm font-semibold text-gray-600 mb-2">Debug AST:</h4>
-          <pre className="text-xs text-gray-500 overflow-auto">
-            {JSON.stringify(equation, null, 2)}
-          </pre>
-        </div>
+        <DebugPanel equation={equation} />
       </div>
     </div>
   );
