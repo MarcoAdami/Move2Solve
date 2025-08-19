@@ -70,13 +70,15 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     if (selectedNodes.length !== 2) return null;
 
     const [first, second] = selectedNodes;
+
+    // If node is type 'binary_op' operation invalid
+    if(first.node.type === 'binary_op' || second.node.type === 'binary_op'){
+      throw new Error;
+    }
     
-    // Devono essere dello stesso tipo
+    // Must be the same type
     if (first.node.type !== second.node.type) return null;
 
-    // FIXME: attenzione alle definizioni dei nodi selezionabili
-    //        in teoria non ci sarebbero 'binary_op' ma li escludo comunque
-    if(first.node.type !== 'binary_op' && second.node.type !== 'binary_op'){
       if (first.node.type === 'variable') {
       return {
         value: first.node.coefficient + second.node.coefficient,
@@ -88,20 +90,20 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
         type: 'constant'
       };
     }
-    }
+    
     
   };
 
-  // Valida l'input dell'utente
+  // Check user input
   const validateUserInput = (input: string): boolean => {
     const correctResult = calculateCorrectResult();
     if (!correctResult) return false;
 
-    // Pulisce l'input
+    // Clear input
     const cleanInput = input.trim().toLowerCase();
 
     if (correctResult.type === 'variable') {
-      // Per variabili: accetta formati come "5x", "-3x", "x", "-x"
+      // Variables accepted format: "5x", "-3x", "x", "-x"
       if (cleanInput === 'x' || cleanInput === '+x') {
         return correctResult.value === 1;
       } else if (cleanInput === '-x') {
@@ -169,6 +171,11 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     const [first, second] = selectedNodes;
     let firstDisplay = '';
     let secondDisplay = '';
+
+
+    if(first.node.type === 'binary_op' || second.node.type === 'binary_op'){
+      throw new Error;
+    }
 
     if (first.node.type === 'variable') {
       const coeff = first.node.coefficient;
