@@ -1,4 +1,4 @@
-// EquationSide.tsx - Componente per i lati dell'equazione (Updated)
+// EquationSide.tsx - Component for the sides of the equation (Updated)
 
 import React from 'react';
 import { ASTNode, Side } from '@/types/AST';
@@ -14,12 +14,12 @@ interface EquationSideProps {
   onNodeSelect?: (node: ASTNode, side: Side) => void;
 }
 
-// Funzione helper per controllare se un nodo è selezionato
+// Helper function to check if a node is selected
 const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean => {
   return selectedIds.includes(node.id);
 };
 
-// Funzione helper per ottenere tutti gli ID dei nodi nell'AST
+// Helper function to get all node IDs in the AST
 const getAllNodeIds = (node: ASTNode): string[] => {
   if (node.type === 'variable' || node.type === 'constant') {
     return [node.id];
@@ -45,7 +45,7 @@ export const EquationSide: React.FC<EquationSideProps> = ({
     ? 'bg-blue-50 border-blue-300' 
     : 'bg-green-50 border-green-300';
 
-  // Controlliamo se qualsiasi nodo di questo AST è selezionato
+  // We check if any node on this AST is selected
   const allNodeIds = getAllNodeIds(ast);
   const hasSelection = allNodeIds.some(id => selectedNodeIds.includes(id));
 

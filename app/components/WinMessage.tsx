@@ -1,4 +1,4 @@
-// WinMessage.tsx - Componente per il messaggio di vittoria
+// WinMessage.tsx - Component for the win message
 
 import React from 'react';
 

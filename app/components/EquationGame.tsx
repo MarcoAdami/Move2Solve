@@ -1,10 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 
-// Import dei tipi
+// Import types
 import { Equation, DraggedNode, ASTNode, Side } from "@/types/AST";
 
-// Import delle utilità
+// Import utils
 import {
   changeSign,
   getLeafNodes,
@@ -12,11 +12,11 @@ import {
   createBinaryOp,
 } from "@/utils/astUtils";
 
-// Import della logica di gioco
+// Import game logic
 import { generateEquation } from "./EquationGenerator";
 import { checkWin } from "./GameLogic";
 
-// Import dei componenti
+// Import components
 import { EquationSide } from "./EquationSide";
 import { WinMessage } from "./WinMessage";
 import { GameInstructions } from "./GameInstructions";
@@ -24,7 +24,7 @@ import { DebugPanel } from "./DebugPanel";
 import { SettingsMenu } from "./SettingsMenu";
 import { SelectionPanel } from "./SelectionPanel";
 
-// Interfacce per la selezione
+// Selection interface
 interface SelectedNode {
   node: ASTNode;
   side: Side;
@@ -35,19 +35,19 @@ const EquationGame: React.FC = () => {
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
   const [gameWon, setGameWon] = useState(false);
 
-  // Stati per le impostazioni
+  // Initial state settings
   const [variablesCount, setVariablesCount] = useState(2);
   const [constantsCount, setConstantsCount] = useState(2);
 
-  // Stati per la selezione
+  // Initial selection state
   const [selectedNodes, setSelectedNodes] = useState<SelectedNode[]>([]);
 
-  // Inizializza il gioco
+  // Game init
   useEffect(() => {
     setEquation(generateEquation({ variablesCount, constantsCount }));
   }, []);
 
-  // Gestore drag start
+  // Drag start manager
   const handleDragStart = (
     e: React.DragEvent,
     node: ASTNode,
@@ -58,41 +58,41 @@ const EquationGame: React.FC = () => {
     e.dataTransfer.effectAllowed = "move";
   };
 
-  // Funzione per pulire la selezione
+  // Clear selection function
   const handleClearSelection = () => {
     setSelectedNodes([]);
   };
 
-  // Gestore selezione nodo
+  // Selection node manager
   const handleNodeSelect = (node: ASTNode, side: Side) => {
     if (selectedNodes.length === 2) {
       handleClearSelection();
     }
 
     setSelectedNodes((prevSelected) => {
-      // Filtra le selezioni esistenti basandosi sulle regole
+      // Filter selection based on rules
       let newSelected = prevSelected.filter((selected) => {
-        // Regola del tipo: se selezioniamo un tipo diverso, rimuovi l'altro tipo
+        // Types rule: if a different type is selected then remove the previous one
         if (selected.node.type !== node.type) {
           return false;
         }
 
-        // Regola del lato: mantieni solo quelli dello stesso lato
+        // Side rule: keep only those on the same side
         return selected.side === side;
       });
 
-      // Controlla se il nodo è già selezionato
+      // Check if the node is already selected
       const alreadySelected = newSelected.find(
         (selected) => selected.node.id === node.id
       );
 
       if (alreadySelected) {
-        // Se già selezionato, rimuovilo
+        // If already selected, remove it
         newSelected = newSelected.filter(
           (selected) => selected.node.id !== node.id
         );
       } else {
-        // Se non selezionato, aggiungilo
+        // If not selected, add it
         newSelected.push({ node, side });
       }
 
@@ -100,18 +100,18 @@ const EquationGame: React.FC = () => {
     });
   };
 
-  // Funzione per combinare i termini selezionati
+  // Function to combine selected terms
   const handleCombineNodes = (
     resultNode: ASTNode,
     selectedNodes: SelectedNode[]
   ) => {
     if (!equation || selectedNodes.length !== 2) return;
 
-    // Trova il lato dove sono i nodi selezionati (sono tutti dello stesso lato)
+    // Find the side where the selected nodes are (they are all on the same side)
     const targetSide = selectedNodes[0].side;
     const targetAST = equation[targetSide];
 
-    // Rimuovi i due nodi selezionati e aggiungi il risultato
+    // Remove the two selected nodes and add the result
     const leafNodes = getLeafNodes(targetAST);
     const selectedIds = selectedNodes.map((s) => s.node.id);
     const remainingNodes = leafNodes.filter(
@@ -130,37 +130,37 @@ const EquationGame: React.FC = () => {
       newAST = createBinaryOp("+", newAST, resultNode);
     }
 
-    // Aggiorna l'equazione
+    // Update the equation
     setEquation({
       ...equation,
       [targetSide]: newAST,
     });
 
-    // Pulisce la selezione
+    // Clear the selection
     setSelectedNodes([]);
   };
 
-  // Gestore drop
+  // Drop handler
   const handleDrop = (e: React.DragEvent, targetSide: Side) => {
     e.preventDefault();
 
     if (!draggedNode || !equation) return;
 
-    // Se droppiamo nello stesso lato, non fare nulla
+    // If we drop on the same side, do nothing
     if (draggedNode.side === targetSide) {
       setDraggedNode(null);
       return;
     }
 
-    // Cambiamo il segno del nodo quando lo spostiamo dall'altra parte
+    // Change the sign of the node when we move it to the other side
     const nodeWithChangedSign = changeSign(draggedNode.node);
 
-    // Rimuoviamo il nodo dal lato originale
+    // Remove the node from the original side
     const sourceSide = draggedNode.side;
     const sourceAST = equation[sourceSide];
 
-    // Per semplicità, ricreiamo l'equazione rimuovendo e aggiungendo
-    // FIXME: penso che si possa fare la rimozionare in una maniera migliore
+    // For simplicity, we recreate the equation by removing and adding
+    // FIXME: I think the removal can be done in a better way
     const leafNodes = getLeafNodes(sourceAST);
     const remainingNodes = leafNodes.filter(
       (leaf) => leaf.node.id !== draggedNode.node.id
@@ -178,13 +178,13 @@ const EquationGame: React.FC = () => {
       }
     }
 
-    // Aggiungiamo il nodo al lato target
+    // Add the node to the target side
     const targetAST = equation[targetSide];
 
     //
     const newTargetAST = addNodeToAST(targetAST, nodeWithChangedSign);
 
-    // Aggiorna l'equazione
+    // Update the equation
     if (newSourceAST) {
       setEquation({
         ...equation,
@@ -196,26 +196,26 @@ const EquationGame: React.FC = () => {
     setDraggedNode(null);
   };
 
-  // Gestore drag over
+  // Drag over handler
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
   };
 
-  // Controlla vittoria quando l'equazione cambia
+  // Check for win when the equation changes
   useEffect(() => {
     if (equation) {
       setGameWon(checkWin(equation));
     }
   }, [equation]);
 
-  // Nuova equazione con parametri attuali
+  // New equation with current parameters
   const newGame = () => {
     setEquation(generateEquation({ variablesCount, constantsCount }));
     setGameWon(false);
-    setSelectedNodes([]); // Pulisce la selezione
+    setSelectedNodes([]); // Clears the selection
   };
 
-  // Ottieni gli ID dei nodi selezionati per evidenziare
+  // Get selected node IDs for highlighting
   const getSelectedNodeIds = (): string[] => {
     return selectedNodes.map((selected) => selected.node.id);
   };
@@ -224,7 +224,7 @@ const EquationGame: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
-      {/* Menu delle impostazioni */}
+      {/* Settings menu */}
       <SettingsMenu
         variablesCount={variablesCount}
         constantsCount={constantsCount}
@@ -232,11 +232,11 @@ const EquationGame: React.FC = () => {
         onConstantsChange={setConstantsCount}
       />
 
-      {/* Pannello selezione */}
+      {/* Selection panel */}
       <SelectionPanel
         selectedNodes={selectedNodes}
         onClearSelection={handleClearSelection}
-        onCombineNodes={handleCombineNodes} // <- Aggiungi questa riga
+        onCombineNodes={handleCombineNodes} // <- Add this line
       />
 
       <div className="max-w mx-auto">
@@ -250,7 +250,7 @@ const EquationGame: React.FC = () => {
           </h2>
 
           <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
-            {/* Lato sinistro */}
+            {/* Left side */}
             <EquationSide
               ast={equation.left}
               side="left"
@@ -261,10 +261,10 @@ const EquationGame: React.FC = () => {
               onNodeSelect={handleNodeSelect}
             />
 
-            {/* Segno uguale */}
+            {/* Equal sign */}
             <div className="text-3xl font-bold text-gray-600">=</div>
 
-            {/* Lato destro */}
+            {/* Right side */}
             <EquationSide
               ast={equation.right}
               side="right"

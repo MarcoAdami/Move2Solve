@@ -1,4 +1,4 @@
-// SelectionPanel.tsx - Pannello per mostrare elementi selezionati (Updated)
+// SelectionPanel.tsx - Panel to show selected elements
 
 import React, { useState, useEffect } from 'react';
 import { ASTNode, Side } from '@/types/AST';
@@ -22,7 +22,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
 
-  // Pulisce input e feedback quando cambiano le selezioni
+  // Clears input and feedback when selections change
   useEffect(() => {
     setUserInput('');
     setFeedback({ type: null, message: '' });
@@ -65,7 +65,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     );
   };
 
-  // Calcola il risultato corretto dell'operazione
+  // Calculates the correct result of the operation
   const calculateCorrectResult = (): { value: number, type: 'variable' | 'constant' } | null => {
     if (selectedNodes.length !== 2) return null;
 
@@ -116,13 +116,13 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
       }
       return false;
     } else {
-      // Per costanti: semplice numero
+      // For constants: a simple number
       const value = parseInt(cleanInput);
       return !isNaN(value) && value === correctResult.value;
     }
   };
 
-  // Crea il nodo risultato
+  // Creates the result node
   const createResultNode = (): ASTNode | null => {
     const correctResult = calculateCorrectResult();
     if (!correctResult) return null;
@@ -145,7 +145,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     }
   };
 
-  // Gestisce la pressione di Invio
+  // Handles the Enter key press
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (validateUserInput(userInput)) {
@@ -164,7 +164,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     }
   };
 
-  // Mostra l'operazione da eseguire
+  // Shows the operation to be performed
   const getOperationDisplay = (): string => {
     if (selectedNodes.length !== 2) return '';
     
@@ -219,7 +219,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
             {selectedNodes.length} elemento{selectedNodes.length !== 1 ? 'i' : ''} selezionat{selectedNodes.length !== 1 ? 'i' : 'o'}
           </p>
           
-          {/* Input per operazione quando ci sono 2 elementi */}
+          {/* Input for operation when there are 2 elements */}
           {selectedNodes.length === 2 && (
             <div className="mt-3">
               <div className="text-sm text-gray-600 mb-2">

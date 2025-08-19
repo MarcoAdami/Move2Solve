@@ -1,4 +1,4 @@
-// ASTNodeComponent.tsx - Componente per il rendering dei nodi AST (Updated)
+// ASTNodeComponent.tsx - Component for rendering AST nodes (Updated)
 
 import React from 'react';
 import { ASTNode, Side } from '@/types/AST';
@@ -57,7 +57,7 @@ export const ASTNodeComponent: React.FC<ASTNodeProps> = ({
         onDragStart={handleDragStart}
         onClick={handleClick}
         className={`${selectedClass} px-3 py-1 rounded cursor-pointer border border-purple-400 transition-all duration-200 inline-block mx-1 select-none`}
-        title="Clicca per selezionare, trascina per spostare"
+        title="Click to select, drag to move"
       >
         {display}
       </span>
@@ -77,7 +77,7 @@ export const ASTNodeComponent: React.FC<ASTNodeProps> = ({
         onDragStart={handleDragStart}
         onClick={handleClick}
         className={`${selectedClass} px-3 py-1 rounded cursor-pointer border border-yellow-400 transition-all duration-200 inline-block mx-1 select-none`}
-        title="Clicca per selezionare, trascina per spostare"
+        title="Click to select, drag to move"
       >
         {display}
       </span>

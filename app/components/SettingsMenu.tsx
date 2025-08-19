@@ -1,4 +1,4 @@
-// SettingsMenu.tsx - Menu delle impostazioni con slider
+// SettingsMenu.tsx - Settings menu with sliders
 
 import React, { useState, useRef, useEffect } from 'react';
 
@@ -18,7 +18,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Chiude il menu quando si clicca fuori
+  // Closes the menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -37,7 +37,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
 
   return (
     <div className="fixed top-4 right-4 z-50" ref={menuRef}>
-      {/* Bottone per aprire/chiudere il menu */}
+      {/* Button to open/close the menu */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition-colors"
@@ -48,12 +48,12 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
         </svg>
       </button>
 
-      {/* Menu dropdown */}
+      {/* Dropdown menu */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-6 min-w-80">
           <h3 className="text-lg font-semibold text-gray-700 mb-4">Impostazioni Equazione</h3>
           
-          {/* Slider per variabili */}
+          {/* Slider for variables */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-600 mb-2">
               Numero di Variabili: <span className="font-bold text-purple-600">{variablesCount}</span>
@@ -68,7 +68,7 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
             />
           </div>
 
-          {/* Slider per costanti */}
+          {/* Slider for constants */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600 mb-2">
               Numero di Costanti: <span className="font-bold text-yellow-600">{constantsCount}</span>

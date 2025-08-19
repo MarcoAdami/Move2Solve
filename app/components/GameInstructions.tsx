@@ -1,5 +1,4 @@
-// GameInstructions.tsx - Componente per le istruzioni del gioco
-
+// GameInstructions.tsx - Component for game instructions
 import React from 'react';
 
 export const GameInstructions: React.FC = () => {

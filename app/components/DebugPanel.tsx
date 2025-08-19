@@ -1,4 +1,4 @@
-// DebugPanel.tsx - Componente per il debug dell'AST
+// DebugPanel.tsx - Component for AST debugging
 
 import React from "react";
 import { ASTNode, Equation } from "@/types/AST";
