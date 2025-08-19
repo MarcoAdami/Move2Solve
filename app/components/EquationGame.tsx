@@ -1,28 +1,28 @@
-'use client'
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useState, useEffect } from "react";
 
 // Import dei tipi
-import { Equation, DraggedNode, ASTNode, Side } from '@/types/AST';
+import { Equation, DraggedNode, ASTNode, Side } from "@/types/AST";
 
-// Import delle utilità 
-import { 
-  changeSign, 
-  getLeafNodes, 
-  addNodeToAST, 
-  createBinaryOp 
-} from '@/utils/astUtils';
+// Import delle utilità
+import {
+  changeSign,
+  getLeafNodes,
+  addNodeToAST,
+  createBinaryOp,
+} from "@/utils/astUtils";
 
 // Import della logica di gioco
-import { generateEquation } from './EquationGenerator';
-import { checkWin } from './GameLogic';
+import { generateEquation } from "./EquationGenerator";
+import { checkWin } from "./GameLogic";
 
 // Import dei componenti
-import { EquationSide } from './EquationSide';
-import { WinMessage } from './WinMessage';
-import { GameInstructions } from './GameInstructions';
-import { DebugPanel } from './DebugPanel';
-import { SettingsMenu } from './SettingsMenu';
-import { SelectionPanel } from './SelectionPanel';
+import { EquationSide } from "./EquationSide";
+import { WinMessage } from "./WinMessage";
+import { GameInstructions } from "./GameInstructions";
+import { DebugPanel } from "./DebugPanel";
+import { SettingsMenu } from "./SettingsMenu";
+import { SelectionPanel } from "./SelectionPanel";
 
 // Interfacce per la selezione
 interface SelectedNode {
@@ -34,11 +34,11 @@ const EquationGame: React.FC = () => {
   const [equation, setEquation] = useState<Equation | null>(null);
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
   const [gameWon, setGameWon] = useState(false);
-  
+
   // Stati per le impostazioni
   const [variablesCount, setVariablesCount] = useState(1);
   const [constantsCount, setConstantsCount] = useState(1);
-  
+
   // Stati per la selezione
   const [selectedNodes, setSelectedNodes] = useState<SelectedNode[]>([]);
 
@@ -48,38 +48,14 @@ const EquationGame: React.FC = () => {
   }, []);
 
   // Gestore drag start
-  const handleDragStart = (e: React.DragEvent, node: ASTNode, path: string[], side: Side) => {
+  const handleDragStart = (
+    e: React.DragEvent,
+    node: ASTNode,
+    path: string[],
+    side: Side
+  ) => {
     setDraggedNode({ node, parentPath: path, side });
-    e.dataTransfer.effectAllowed = 'move';
-  };
-
-  // Gestore selezione nodo
-  const handleNodeSelect = (node: ASTNode, side: Side) => {
-    setSelectedNodes(prevSelected => {
-      // Filtra le selezioni esistenti basandosi sulle regole
-      let newSelected = prevSelected.filter(selected => {
-        // Regola del tipo: se selezioniamo un tipo diverso, rimuovi l'altro tipo
-        if (selected.node.type !== node.type) {
-          return false;
-        }
-        
-        // Regola del lato: mantieni solo quelli dello stesso lato
-        return selected.side === side;
-      });
-
-      // Controlla se il nodo è già selezionato
-      const alreadySelected = newSelected.find(selected => selected.node.id === node.id);
-      
-      if (alreadySelected) {
-        // Se già selezionato, rimuovilo
-        newSelected = newSelected.filter(selected => selected.node.id !== node.id);
-      } else {
-        // Se non selezionato, aggiungilo
-        newSelected.push({ node, side });
-      }
-      
-      return newSelected;
-    });
+    e.dataTransfer.effectAllowed = "move";
   };
 
   // Funzione per pulire la selezione
@@ -87,10 +63,87 @@ const EquationGame: React.FC = () => {
     setSelectedNodes([]);
   };
 
+  // Gestore selezione nodo
+  const handleNodeSelect = (node: ASTNode, side: Side) => {
+    if (selectedNodes.length === 2) {
+      handleClearSelection();
+    }
+
+    setSelectedNodes((prevSelected) => {
+      // Filtra le selezioni esistenti basandosi sulle regole
+      let newSelected = prevSelected.filter((selected) => {
+        // Regola del tipo: se selezioniamo un tipo diverso, rimuovi l'altro tipo
+        if (selected.node.type !== node.type) {
+          return false;
+        }
+
+        // Regola del lato: mantieni solo quelli dello stesso lato
+        return selected.side === side;
+      });
+
+      // Controlla se il nodo è già selezionato
+      const alreadySelected = newSelected.find(
+        (selected) => selected.node.id === node.id
+      );
+
+      if (alreadySelected) {
+        // Se già selezionato, rimuovilo
+        newSelected = newSelected.filter(
+          (selected) => selected.node.id !== node.id
+        );
+      } else {
+        // Se non selezionato, aggiungilo
+        newSelected.push({ node, side });
+      }
+
+      return newSelected;
+    });
+  };
+
+  // Funzione per combinare i termini selezionati
+  const handleCombineNodes = (
+    resultNode: ASTNode,
+    selectedNodes: SelectedNode[]
+  ) => {
+    if (!equation || selectedNodes.length !== 2) return;
+
+    // Trova il lato dove sono i nodi selezionati (sono tutti dello stesso lato)
+    const targetSide = selectedNodes[0].side;
+    const targetAST = equation[targetSide];
+
+    // Rimuovi i due nodi selezionati e aggiungi il risultato
+    const leafNodes = getLeafNodes(targetAST);
+    const selectedIds = selectedNodes.map((s) => s.node.id);
+    const remainingNodes = leafNodes.filter(
+      (leaf) => !selectedIds.includes(leaf.node.id)
+    );
+
+    // FIXME: find a better way to delete and add nodes
+    let newAST: ASTNode;
+    if (remainingNodes.length === 0) {
+      newAST = resultNode;
+    } else {
+      newAST = remainingNodes[0].node;
+      for (let i = 1; i < remainingNodes.length; i++) {
+        newAST = createBinaryOp("+", newAST, remainingNodes[i].node);
+      }
+      newAST = createBinaryOp("+", newAST, resultNode);
+    }
+
+    // Aggiorna l'equazione
+    setEquation({
+      ...equation,
+      [targetSide]: newAST,
+    });
+
+    // Pulisce la selezione
+    setSelectedNodes([]);
+  };
+
   // Gestore drop
   const handleDrop = (e: React.DragEvent, targetSide: Side) => {
     e.preventDefault();
-    
+
     if (!draggedNode || !equation) return;
 
     // Se droppiamo nello stesso lato, non fare nulla
@@ -105,21 +158,30 @@ const EquationGame: React.FC = () => {
     // Rimuoviamo il nodo dal lato originale
     const sourceSide = draggedNode.side;
     const sourceAST = equation[sourceSide];
-    
+
     // Per semplicità, ricreiamo l'equazione rimuovendo e aggiungendo
+    // FIXME: penso che si possa fare la rimozionare in una maniera migliore
     const leafNodes = getLeafNodes(sourceAST);
-    const remainingNodes = leafNodes.filter(leaf => leaf.node.id !== draggedNode.node.id);
-    
+    const remainingNodes = leafNodes.filter(
+      (leaf) => leaf.node.id !== draggedNode.node.id
+    );
+
     let newSourceAST: ASTNode | null = null;
     if (remainingNodes.length > 0) {
       newSourceAST = remainingNodes[0].node;
       for (let i = 1; i < remainingNodes.length; i++) {
-        newSourceAST = createBinaryOp('+', newSourceAST, remainingNodes[i].node);
+        newSourceAST = createBinaryOp(
+          "+",
+          newSourceAST,
+          remainingNodes[i].node
+        );
       }
     }
 
     // Aggiungiamo il nodo al lato target
     const targetAST = equation[targetSide];
+
+    //
     const newTargetAST = addNodeToAST(targetAST, nodeWithChangedSign);
 
     // Aggiorna l'equazione
@@ -127,7 +189,7 @@ const EquationGame: React.FC = () => {
       setEquation({
         ...equation,
         [sourceSide]: newSourceAST,
-        [targetSide]: newTargetAST
+        [targetSide]: newTargetAST,
       });
     }
 
@@ -155,7 +217,7 @@ const EquationGame: React.FC = () => {
 
   // Ottieni gli ID dei nodi selezionati per evidenziare
   const getSelectedNodeIds = (): string[] => {
-    return selectedNodes.map(selected => selected.node.id);
+    return selectedNodes.map((selected) => selected.node.id);
   };
 
   if (!equation) return <div>Caricamento...</div>;
@@ -174,18 +236,19 @@ const EquationGame: React.FC = () => {
       <SelectionPanel
         selectedNodes={selectedNodes}
         onClearSelection={handleClearSelection}
+        onCombineNodes={handleCombineNodes} // <- Aggiungi questa riga
       />
 
       <div className="max-w mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
           🧮 Gioco delle Equazioni (AST)
         </h1>
-        
+
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
           <h2 className="text-xl font-semibold text-gray-700 mb-4 text-center">
             Trascina i termini per risolvere l'equazione!
           </h2>
-          
+
           <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
             {/* Lato sinistro */}
             <EquationSide
