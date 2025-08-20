@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { ASTNode, Side } from '@/types/AST';
+import { useTranslation } from 'next-i18next';
 
 interface SelectedNode {
   node: ASTNode;
@@ -19,6 +20,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   onClearSelection,
   onCombineNodes
 }) => {
+  const { t } = useTranslation('common'); // Init translation hook
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
 
@@ -197,7 +199,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   return (
     <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-semibold text-gray-700">Elementi Selezionati</h4>
+        <h4 className="text-sm font-semibold text-gray-700">{t('selectionPanelTitle')}</h4>
         <button
           onClick={onClearSelection}
           className="text-gray-400 hover:text-gray-600 transition-colors"
@@ -230,12 +232,12 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Scrivi il risultato e premi Invio"
+                placeholder={t('inputPlaceholder')}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 autoFocus
               />
               <p className="text-xs text-gray-400 mt-1">
-                Premi Invio per confermare
+                {t('confirmEnter')}
               </p>
             </div>
           )}

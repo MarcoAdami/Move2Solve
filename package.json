@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "i18next": "^25.3.6",
+    "i18next-resources-to-backend": "^1.2.1",
     "lucide-react": "^0.534.0",
     "next": "15.4.5",
+    "next-i18next": "^15.4.2",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-i18next": "^15.6.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

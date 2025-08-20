@@ -1,0 +1,33 @@
+{
+  "gameTitle": "🧮 Gioco delle Equazioni (AST)",
+
+  "dragInstructions": "Trascina i termini per risolvere l'equazione!",
+  "newEquationButton": "Nuova Equazione",
+
+  "howToPlayTitle": "Come giocare:",
+  "color1": "Viola",
+  "color2": "Giallo",
+  "variables": "Variabili",
+  "constants": "Costanti",
+  "dragTerms": "Trascina i termini da un lato all'altro dell'equazione",
+  "signChange": "Il segno cambierà automaticamente quando sposti un termine",
+  "sumAction": "Per sommare due termini cliccali e poi inserisci il risultato corretto",
+  "objective": "Obiettivo: metti tutte le x da una parte e tutti i numeri dall'altra e risolvi tutte le somme",
+  
+  "winMessageTitle": "🎉 Complimenti! Hai risolto l'equazione!",
+  "winMessageText": "Tutte le variabili sono da una parte e le costanti dall'altra.",
+  
+  "settingsTitle": "Impostazioni Equazione",
+  "variablesCountLabel": "Numero di Variabili:",
+  "constantsCountLabel": "Numero di Costanti:",
+  "applyChangesInfo": "Clicca \"Nuova Equazione\" per applicare le modifiche",
+  
+  "selectionPanelTitle": "Elementi selezionati",
+  "clearSelectionButton": "Pulisci selezione",
+  "elementsSelected": "{{count}} elemento{{count_plural}} selezionat{{count_plural}}",
+  "calculatePrompt": "Calcola:",
+  "inputPlaceholder": "Scrivi il risultato e premi Invio",
+  "confirmEnter": "Premi Invio per confermare",
+  "feedbackSuccess": "✅ Corretto! Operazione applicata.",
+  "feedbackError": "❌ Risultato non corretto. Riprova!"
+}

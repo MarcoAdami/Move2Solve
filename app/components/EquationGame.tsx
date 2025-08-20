@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'next-i18next';
 
 // Import types
 import { Equation, DraggedNode, ASTNode, Side } from "@/types/AST";
@@ -31,6 +32,9 @@ interface SelectedNode {
 }
 
 const EquationGame: React.FC = () => {
+
+  const { t } = useTranslation('common'); // Init translation hook
+
   const [equation, setEquation] = useState<Equation | null>(null);
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
   const [gameWon, setGameWon] = useState(false);
@@ -241,7 +245,7 @@ const EquationGame: React.FC = () => {
 
       <div className="max-w mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
-          🧮 Gioco delle Equazioni (AST)
+          {t('gameTitle')}
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
@@ -284,7 +288,7 @@ const EquationGame: React.FC = () => {
             onClick={newGame}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg transition-colors"
           >
-            Nuova Equazione
+            {t('newEquationButton')}
           </button>
         </div>
 

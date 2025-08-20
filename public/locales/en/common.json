@@ -1,0 +1,32 @@
+{
+  "gameTitle": "🧮 Equation Game (AST)",
+  
+  "dragInstructions": "Drag the terms to solve the equation!",
+  "newEquationButton": "New Equation",
+
+  "howToPlayTitle": "How to play:",
+  "color1": "Purple",
+  "color2": "Yellow",
+  "variables": "Variables",
+  "constants": "Constants",
+
+  "dragTerms": "Drag terms from one side of the equation to the other",
+  "signChange": "The sign will change automatically when you move a term",
+  "sumAction": "Per sommare due termini cliccali e poi inserisci il risultato corretto",
+  "objective": "Objective: get all the x's on one side and all the numbers on the other",
+  
+  "winMessageTitle": "🎉 Congratulations! You solved the equation!",
+  "winMessageText": "All variables are on one side and constants are on the other.",
+  "settingsTitle": "Equation Settings",
+  "variablesCountLabel": "Number of Variables:",
+  "constantsCountLabel": "Number of Constants:",
+  "applyChangesInfo": "Click \"New Equation\" to apply the changes",
+  "selectionPanelTitle": "Selected Elements",
+  "clearSelectionButton": "Clear selection",
+  "elementsSelected": "{{count}} element{{count_plural}} selected",
+  "calculatePrompt": "Calculate:",
+  "inputPlaceholder": "Write the result and press Enter",
+  "confirmEnter": "Press Enter to confirm",
+  "feedbackSuccess": "✅ Correct! Operation applied.",
+  "feedbackError": "❌ Incorrect result. Try again!"
+}

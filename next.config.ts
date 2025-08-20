@@ -1,7 +1,16 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  /* config options here */
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  async redirects() {
+    return [
+      // Basic redirect
+      {
+        source: '/',
+        destination: '/it',
+        permanent: true,
+      },
+    ]
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
