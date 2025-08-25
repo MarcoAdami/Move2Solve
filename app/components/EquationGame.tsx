@@ -249,9 +249,6 @@ const EquationGame: React.FC = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <h2 className="text-xl font-semibold text-gray-700 mb-4 text-center">
-            Trascina i termini per risolvere l'equazione!
-          </h2>
 
           <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
             {/* Left side */}

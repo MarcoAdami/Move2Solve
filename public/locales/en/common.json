@@ -12,7 +12,7 @@
 
   "dragTerms": "Drag terms from one side of the equation to the other",
   "signChange": "The sign will change automatically when you move a term",
-  "sumAction": "Per sommare due termini cliccali e poi inserisci il risultato corretto",
+  "sumAction": "Sum two terms by clicking them and then write the right result",
   "objective": "Objective: get all the x's on one side and all the numbers on the other",
   
   "winMessageTitle": "🎉 Congratulations! You solved the equation!",
