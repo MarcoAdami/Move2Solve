@@ -8,6 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Equation Solver Game',
   description: 'Un gioco interattivo per imparare a risolvere le equazioni',
+  icons: {icon: '/favicon.png'},
 };
 
 export default function RootLayout({
