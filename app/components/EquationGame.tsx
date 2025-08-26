@@ -40,8 +40,8 @@ const EquationGame: React.FC = () => {
   const [gameWon, setGameWon] = useState(false);
 
   // Initial state settings
-  const [variablesCount, setVariablesCount] = useState(2);
-  const [constantsCount, setConstantsCount] = useState(2);
+  const [variablesCount, setVariablesCount] = useState<number>(2);
+  const [constantsCount, setConstantsCount] = useState<number>(2);
 
   // Initial selection state
   const [selectedNodes, setSelectedNodes] = useState<SelectedNode[]>([]);

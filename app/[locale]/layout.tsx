@@ -16,7 +16,7 @@ export default function RootLayout({
   params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: any }; //TODO: find a way to solve type problems
 }) {
   return (
     <html lang={locale}>
