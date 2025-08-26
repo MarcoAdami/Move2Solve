@@ -46,7 +46,7 @@ const EquationGame: React.FC = () => {
   // Game init
   useEffect(() => {
     setEquation(generateEquation({ variablesCount, constantsCount }));
-  }, []);
+  }, [variablesCount, constantsCount]);
 
   // Drag start manager
   const handleDragStart = (

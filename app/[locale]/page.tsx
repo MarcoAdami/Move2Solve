@@ -2,11 +2,7 @@
 
 import EquationGame from '../components/EquationGame';
 
-export default function HomePage({
-  params: { locale },
-}: {
-  params: { locale: string };
-}) {
+export default function HomePage() {
   return (
       <main>
         <EquationGame />
