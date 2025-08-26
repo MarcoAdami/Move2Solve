@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { ASTNode, Side } from '@/types/AST';
-import { useTranslation } from 'next-i18next';
 
 interface SelectedNode {
   node: ASTNode;
@@ -20,7 +19,6 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   onClearSelection,
   onCombineNodes
 }) => {
-  const { t } = useTranslation('common'); // Init translation hook
   const [userInput, setUserInput] = useState('');
   const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | null, message: string }>({ type: null, message: '' });
 
@@ -199,11 +197,11 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   return (
     <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm">
       <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-semibold text-gray-700">{t('selectionPanelTitle')}</h4>
+        <h4 className="text-sm font-semibold text-gray-700">Selected Elements</h4>
         <button
           onClick={onClearSelection}
           className="text-gray-400 hover:text-gray-600 transition-colors"
-          title="Cancella selezione"
+          title="Clear selection"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -232,12 +230,12 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder={t('inputPlaceholder')}
+                placeholder="Write the result and press Enter"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
                 autoFocus
               />
               <p className="text-xs text-gray-400 mt-1">
-                {t('confirmEnter')}
+                Press "Enter" to confirm
               </p>
             </div>
           )}

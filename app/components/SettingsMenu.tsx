@@ -1,7 +1,6 @@
 // SettingsMenu.tsx - Settings menu with sliders
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'next-i18next';
 
 interface SettingsMenuProps {
   variablesCount: number;
