@@ -48,8 +48,8 @@ const combineNodes = (nodes: ASTNode[]): ASTNode => {
 export const generateEquation = (params?: EquationParams): Equation => {
   const { variablesCount = 1, constantsCount = 1 } = params || {};
   
-  let alpha = Math.floor(Math.random()*variablesCount);
-  let beta = Math.floor(Math.random()*constantsCount);
+  const alpha = Math.floor(Math.random()*variablesCount);
+  const beta = Math.floor(Math.random()*constantsCount);
   
 
   // Generates nodes for the left side
