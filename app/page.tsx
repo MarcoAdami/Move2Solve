@@ -1,6 +1,6 @@
 // app/[locale]/page.tsx
 
-import EquationGame from '../components/EquationGame';
+import EquationGame from './components/EquationGame';
 
 export default function HomePage() {
   return (
