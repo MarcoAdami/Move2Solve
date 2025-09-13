@@ -1,17 +1,13 @@
-// SelectionPanel.tsx - Panel to show selected elements
-
+// components/SelectionPanel.tsx
+"use client";
 import React, { useState, useEffect } from "react";
 import { ASTNode, Side } from "@/app/types/AST";
-
-interface SelectedNode {
-  node: ASTNode;
-  side: Side;
-}
+import { SelectedNode } from "@/app/contexts/SelectionContext";
 
 interface SelectionPanelProps {
   selectedNodes: SelectedNode[];
   onClearSelection: () => void;
-  onCombineNodes?: (result: ASTNode, selectedNodes: SelectedNode[]) => void;
+  onCombineNodes: (result: ASTNode) => void;
 }
 
 export const SelectionPanel: React.FC<SelectionPanelProps> = ({
@@ -79,7 +75,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
 
     // If node is type 'binary_op' operation invalid
     if (first.node.type === "binary_op" || second.node.type === "binary_op") {
-      throw new Error();
+      return null;
     }
 
     // Must be the same type
@@ -165,7 +161,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
             message: "✅ Corretto! Operazione applicata.",
           });
           setTimeout(() => {
-            onCombineNodes(resultNode, selectedNodes);
+            onCombineNodes(resultNode);
             setFeedback({ type: null, message: "" });
           }, 200);
         }
@@ -188,7 +184,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     let secondDisplay = "";
 
     if (first.node.type === "binary_op" || second.node.type === "binary_op") {
-      throw new Error();
+      return "";
     }
 
     if (first.node.type === "variable") {
