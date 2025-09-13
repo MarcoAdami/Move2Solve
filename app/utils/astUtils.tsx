@@ -1,43 +1,48 @@
 // astUtils.tsx - Utilità per la manipolazione dell'Abstract Syntax Tree
 
-import { ASTNode, Equation, LeafNode } from '@/types/AST';
+import { ASTNode, Equation, LeafNode } from "@/app/types/AST";
 
 // Genera un ID univoco
-export const generateId = (): string => `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
+export const generateId = (): string =>
+  `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
 // Crea un nodo variabile
 export const createVariable = (coefficient: number): ASTNode => ({
-  type: 'variable',
-  name: 'x',
+  type: "variable",
+  name: "x",
   coefficient,
-  id: generateId()
+  id: generateId(),
 });
 
 // Crea un nodo costante
 export const createConstant = (coefficient: number): ASTNode => ({
-  type: 'constant',
+  type: "constant",
   coefficient,
-  id: generateId()
+  id: generateId(),
 });
 
 // Crea un nodo operazione binaria
-export const createBinaryOp = (operator: '+' | '-', left: ASTNode, right: ASTNode): ASTNode => ({
-  type: 'binary_op',
+export const createBinaryOp = (
+  operator: "+" | "-",
+  left: ASTNode,
+  right: ASTNode
+): ASTNode => ({
+  type: "binary_op",
   operator,
   left,
   right,
-  id: generateId()
+  id: generateId(),
 });
 
 // Clona un nodo AST mantenendo lo stesso ID
 export const cloneNode = (node: ASTNode): ASTNode => {
-  if (node.type === 'variable' || node.type === 'constant') {
-    return { ...node};
+  if (node.type === "variable" || node.type === "constant") {
+    return { ...node };
   } else {
     return {
       ...node,
       left: cloneNode(node.left),
-      right: cloneNode(node.right)
+      right: cloneNode(node.right),
     };
   }
 };
@@ -45,42 +50,42 @@ export const cloneNode = (node: ASTNode): ASTNode => {
 // Cambia il segno di un nodo
 export const changeSign = (node: ASTNode): ASTNode => {
   const cloned = cloneNode(node);
-  
-  if (cloned.type === 'variable' || cloned.type === 'constant') {
+
+  if (cloned.type === "variable" || cloned.type === "constant") {
     return { ...cloned, coefficient: -cloned.coefficient };
-  }else{
-    return {...cloned};
+  } else {
+    return { ...cloned };
   }
 };
 
 // Trova tutti i nodi foglia (trascinabili) di un AST
 export const getLeafNodes = (node: ASTNode): LeafNode[] => {
-  if (node.type === 'variable' || node.type === 'constant') {
-    return [{ node}];
+  if (node.type === "variable" || node.type === "constant") {
+    return [{ node }];
   } else {
-    return [
-      ...getLeafNodes(node.left),
-      ...getLeafNodes(node.right)
-    ];
+    return [...getLeafNodes(node.left), ...getLeafNodes(node.right)];
   }
 };
 
 // Rimuove un nodo dall'AST dato il suo path
-export const removeNodeFromAST = (ast: ASTNode, targetPath: string[]): ASTNode | null => {
+export const removeNodeFromAST = (
+  ast: ASTNode,
+  targetPath: string[]
+): ASTNode | null => {
   if (targetPath.length === 0) return null;
-  
+
   if (targetPath.length === 1) {
     // Siamo al penultimo livello
-    if (ast.type === 'binary_op') {
-      const direction = targetPath[0] as 'left' | 'right';
-      const otherDirection = direction === 'left' ? 'right' : 'left';
+    if (ast.type === "binary_op") {
+      const direction = targetPath[0] as "left" | "right";
+      const otherDirection = direction === "left" ? "right" : "left";
       return ast[otherDirection];
     }
   }
-  
-  if (ast.type === 'binary_op') {
+
+  if (ast.type === "binary_op") {
     const [first, ...rest] = targetPath;
-    if (first === 'left') {
+    if (first === "left") {
       const newLeft = removeNodeFromAST(ast.left, rest);
       return newLeft ? { ...ast, left: newLeft } : ast.right;
     } else {
@@ -88,7 +93,7 @@ export const removeNodeFromAST = (ast: ASTNode, targetPath: string[]): ASTNode |
       return newRight ? { ...ast, right: newRight } : ast.left;
     }
   }
-  
+
   return ast;
 };
 
@@ -96,5 +101,5 @@ export const removeNodeFromAST = (ast: ASTNode, targetPath: string[]): ASTNode |
 // Aggiunge un nodo all'AST
 export const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
   // Strategia semplice: aggiungiamo sempre con un'operazione +
-  return createBinaryOp('+', ast, newNode);
+  return createBinaryOp("+", ast, newNode);
 };

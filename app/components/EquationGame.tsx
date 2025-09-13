@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 // Import types
-import { Equation, DraggedNode, ASTNode, Side } from "@/types/AST";
+import { Equation, DraggedNode, ASTNode, Side } from "@/app/types/AST";
 
 // Import utils
 import {
@@ -10,7 +10,7 @@ import {
   getLeafNodes,
   addNodeToAST,
   createBinaryOp,
-} from "@/utils/astUtils";
+} from "@/app/utils/astUtils";
 
 // Import game logic
 import { generateEquation } from "./EquationGenerator";
@@ -31,7 +31,6 @@ interface SelectedNode {
 }
 
 const EquationGame: React.FC = () => {
-
   const [equation, setEquation] = useState<Equation | null>(null);
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
   const [gameWon, setGameWon] = useState(false);
@@ -246,7 +245,6 @@ const EquationGame: React.FC = () => {
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-
           <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
             {/* Left side */}
             <EquationSide

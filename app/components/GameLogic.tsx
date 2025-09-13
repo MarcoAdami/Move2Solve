@@ -1,7 +1,7 @@
 // gameLogic.ts - Game control logic
 
-import { Equation } from '@/types/AST';
-import { getLeafNodes } from '@/utils/astUtils';
+import { Equation } from "@/app/types/AST";
+import { getLeafNodes } from "@/app/utils/astUtils";
 
 // Win: when all sums are solved
 export const checkWin = (equation: Equation): boolean => {
@@ -17,5 +17,5 @@ export const checkWin = (equation: Equation): boolean => {
   // const rightSolution  = rightValueCostant - leftValueCostant;
 
   // Win if all variables are on one side and all constants are on the other
-  return (rightLeaves.length === 1 && leftLeaves.length === 1);
+  return rightLeaves.length === 1 && leftLeaves.length === 1;
 };
