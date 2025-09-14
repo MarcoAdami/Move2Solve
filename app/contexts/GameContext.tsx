@@ -1,9 +1,15 @@
 // contexts/GameContext.tsx
 "use client";
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Equation } from '@/app/types/AST';
-import { generateEquation } from '@/app/components/EquationGenerator';
-import { checkWin } from '@/app/components/GameLogic';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { Equation } from "@/app/types/ast";
+import { generateEquation } from "@/app/utils/equationUtils";
+import { checkWin } from "@/app/components/GameLogic";
 
 interface GameSettings {
   variablesCount: number;
@@ -21,7 +27,9 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
-export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const GameProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [equation, setEquation] = useState<Equation | null>(null);
   const [gameWon, setGameWon] = useState(false);
   const [settings, setSettings] = useState<GameSettings>({
@@ -44,7 +52,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, [equation]);
 
   const updateSettings = (newSettings: Partial<GameSettings>) => {
-    setSettings(prev => ({ ...prev, ...newSettings }));
+    setSettings((prev) => ({ ...prev, ...newSettings }));
   };
 
   const resetGame = () => {
@@ -53,7 +61,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   return (
-    <GameContext.Provider 
+    <GameContext.Provider
       value={{
         equation,
         setEquation,
@@ -71,7 +79,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 export const useGame = () => {
   const context = useContext(GameContext);
   if (!context) {
-    throw new Error('useGame must be used within a GameProvider');
+    throw new Error("useGame must be used within a GameProvider");
   }
   return context;
 };

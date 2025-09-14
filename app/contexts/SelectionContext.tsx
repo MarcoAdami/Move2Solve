@@ -1,7 +1,7 @@
 // contexts/SelectionContext.tsx
 "use client";
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-import { ASTNode, Side } from '@/app/types/AST';
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { ASTNode, Side } from "@/app/types/ast";
 
 export interface SelectedNode {
   node: ASTNode;
@@ -15,9 +15,13 @@ interface SelectionContextType {
   getSelectedNodeIds: () => string[];
 }
 
-const SelectionContext = createContext<SelectionContextType | undefined>(undefined);
+const SelectionContext = createContext<SelectionContextType | undefined>(
+  undefined
+);
 
-export const SelectionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const SelectionProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [selectedNodes, setSelectedNodes] = useState<SelectedNode[]>([]);
 
   const selectNode = (node: ASTNode, side: Side) => {
@@ -81,7 +85,7 @@ export const SelectionProvider: React.FC<{ children: ReactNode }> = ({ children 
 export const useSelection = () => {
   const context = useContext(SelectionContext);
   if (!context) {
-    throw new Error('useSelection must be used within a SelectionProvider');
+    throw new Error("useSelection must be used within a SelectionProvider");
   }
   return context;
 };

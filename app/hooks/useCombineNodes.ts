@@ -1,10 +1,10 @@
 // hooks/useCombineNodes.tsx
 "use client";
-import { useGame } from '@/app/contexts/GameContext';
-import { useSelection } from '@/app/contexts/SelectionContext';
-import { ASTNode } from '@/app/types/AST';
-import { getLeafNodes, createBinaryOp } from '@/app/utils/astUtils';
-import { SelectedNode } from '@/app/contexts/SelectionContext';
+import { useGame } from "@/app/contexts/GameContext";
+import { useSelection } from "@/app/contexts/SelectionContext";
+import { ASTNode } from "@/app/types/ast";
+import { getLeafNodes, createBinaryOp } from "@/app/utils/astUtils";
+import { SelectedNode } from "@/app/contexts/SelectionContext";
 
 export const useCombineNodes = () => {
   const { equation, setEquation } = useGame();
@@ -30,9 +30,9 @@ export const useCombineNodes = () => {
     } else {
       newAST = remainingNodes[0].node;
       for (let i = 1; i < remainingNodes.length; i++) {
-        newAST = createBinaryOp('+', newAST, remainingNodes[i].node);
+        newAST = createBinaryOp("+", newAST, remainingNodes[i].node);
       }
-      newAST = createBinaryOp('+', newAST, resultNode);
+      newAST = createBinaryOp("+", newAST, resultNode);
     }
 
     // Update the equation

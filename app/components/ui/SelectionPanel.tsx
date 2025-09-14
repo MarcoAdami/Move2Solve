@@ -1,7 +1,7 @@
 // components/SelectionPanel.tsx
 "use client";
 import React, { useState, useEffect } from "react";
-import { ASTNode, Side } from "@/app/types/AST";
+import { ASTNode, Side } from "@/app/types/ast";
 import { SelectedNode } from "@/app/contexts/SelectionContext";
 
 interface SelectionPanelProps {
@@ -22,13 +22,15 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   }>({ type: null, message: "" });
 
   // Clears input and feedback when selections change
+  // FIXME: uptade selection also in other cases (such as new equation)
   useEffect(() => {
     setUserInput("");
     setFeedback({ type: null, message: "" });
   }, [selectedNodes]);
 
-  if (selectedNodes.length === 0) return null;
+  // if (selectedNodes.length === 0) return null;
 
+  //render selected node for proper display
   const renderSelectedNode = (selectedNode: SelectedNode, index: number) => {
     const { node, side } = selectedNode;
     let display = "";
@@ -49,8 +51,8 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
       bgColor = "bg-yellow-200 border-yellow-400";
     }
 
-    const sideColor = side === "left" ? "text-blue-600" : "text-green-600";
-    const sideText = side === "left" ? "SX" : "DX";
+    // const sideColor = side === "left" ? "text-blue-600" : "text-green-600";
+    // const sideText = side === "left" ? "SX" : "DX";
 
     return (
       <div key={`${node.id}-${index}`} className="flex items-center space-x-2">
@@ -59,7 +61,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
         >
           {display}
         </span>
-        <span className={`text-xs ${sideColor} font-medium`}>({sideText})</span>
+        {/* <span className={`text-xs ${sideColor} font-medium`}>({sideText})</span> */}
       </div>
     );
   };
@@ -151,6 +153,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   };
 
   // Handles the Enter key press
+  //REVIEW:  there is no space to show it, meaningfull for feedback
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       if (validateUserInput(userInput)) {
@@ -158,7 +161,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
         if (resultNode && onCombineNodes) {
           setFeedback({
             type: "success",
-            message: "✅ Corretto! Operazione applicata.",
+            message: "✅ Right! Operation applied.",
           });
           setTimeout(() => {
             onCombineNodes(resultNode);
@@ -168,7 +171,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
       } else {
         setFeedback({
           type: "error",
-          message: "❌ Risultato non corretto. Riprova!",
+          message: "❌ Wrong. Try again!",
         });
         setTimeout(() => setFeedback({ type: null, message: "" }), 3000);
       }
@@ -176,6 +179,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   };
 
   // Shows the operation to be performed
+  //REVIEW: understan if this function could be useful in the future
   const getOperationDisplay = (): string => {
     if (selectedNodes.length !== 2) return "";
 
@@ -205,84 +209,31 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
   };
 
   return (
-    <div className="fixed bottom-4 right-4 bg-white rounded-lg shadow-xl border border-gray-200 p-4 max-w-sm">
-      <div className="flex items-center justify-between mb-3">
-        <h4 className="text-sm font-semibold text-gray-700">
-          Selected Elements
+    <div>
+      <div className="flex gap-2">
+        <h4 className="text-xl font-semibold text-gray-700">
+          Selected Elements:
         </h4>
-        <button
-          onClick={onClearSelection}
-          className="text-gray-400 hover:text-gray-600 transition-colors"
-          title="Clear selection"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
-      </div>
-
-      <div className="space-y-2">
         {selectedNodes.map((selectedNode, index) =>
           renderSelectedNode(selectedNode, index)
         )}
       </div>
 
-      {selectedNodes.length > 0 && (
-        <div className="mt-3 pt-3 border-t border-gray-200">
-          <p className="text-xs text-gray-500">
-            {selectedNodes.length} elemento
-            {selectedNodes.length !== 1 ? "i" : ""} selezionat
-            {selectedNodes.length !== 1 ? "i" : "o"}
-          </p>
-
-          {/* Input for operation when there are 2 elements */}
-          {selectedNodes.length === 2 && (
-            <div className="mt-3">
-              <div className="text-sm text-gray-600 mb-2">
-                Calcola:{" "}
-                <span className="font-mono font-semibold">
-                  {getOperationDisplay()}
-                </span>
-              </div>
-              <input
-                type="text"
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Write the result and press Enter"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-                autoFocus
-              />
-              <p className="text-xs text-gray-400 mt-1">
-                Press "Enter" to confirm
-              </p>
-            </div>
-          )}
-
-          {/* Feedback */}
-          {feedback.type && (
-            <div
-              className={`mt-2 p-2 rounded text-xs ${
-                feedback.type === "success"
-                  ? "bg-green-100 text-green-700 border border-green-200"
-                  : "bg-red-100 text-red-700 border border-red-200"
-              }`}
-            >
-              {feedback.message}
-            </div>
-          )}
-        </div>
-      )}
+      <div className="flex gap-2">
+        <h4 className="text-xl font-semibold text-gray-700">Result:</h4>
+        {/* REVIEW: not the best looking way to loading it, but it works:) */}
+        {selectedNodes.length > 1 && (
+          <input
+            type="text"
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="Write the result and press Enter"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            autoFocus
+          />
+        )}
+      </div>
     </div>
   );
 };

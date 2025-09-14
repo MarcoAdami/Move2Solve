@@ -1,6 +1,6 @@
 // gameLogic.ts - Game control logic
 
-import { Equation } from "@/app/types/AST";
+import { Equation } from "@/app/types/ast";
 import { getLeafNodes } from "@/app/utils/astUtils";
 
 // Win: when all sums are solved

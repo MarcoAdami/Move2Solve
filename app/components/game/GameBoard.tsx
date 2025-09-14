@@ -3,16 +3,16 @@
 import React from "react";
 import { useGame } from "@/app/contexts/GameContext";
 import { useSelection } from "@/app/contexts/SelectionContext";
-import { useDragAndDrop } from "../hooks/useDragAndDrop";
+import { useDragAndDrop } from "@/app/hooks/useDragAndDrop";
 import { useCombineNodes } from "@/app/hooks/useCombineNodes";
 
 // Import components
-import { EquationSide } from "./EquationSide";
-import { WinMessage } from "./WinMessage";
-import { GameInstructions } from "./GameInstructions";
-import { DebugPanel } from "./DebugPanel";
-import { SettingsMenu } from "./SettingsMenu";
-import { SelectionPanel } from "./SelectionPanel";
+import { EquationSide } from "@/app/components/equation/EquationSide";
+import { WinMessage } from "@/app/components/ui/WinMessage";
+import { GameInstructions } from "@/app/components/GameInstructions";
+import { DebugPanel } from "@/app/components/ui/DebugPanel";
+import { SettingsMenu } from "@/app/components/SettingsMenu";
+import { SelectionPanel } from "@/app/components/ui/SelectionPanel";
 
 export const GameBoard: React.FC = () => {
   const { equation, gameWon, resetGame, settings, updateSettings } = useGame();
@@ -32,20 +32,13 @@ export const GameBoard: React.FC = () => {
         onConstantsChange={(count) => updateSettings({ constantsCount: count })}
       />
 
-      {/* Selection panel */}
-      <SelectionPanel
-        selectedNodes={selectedNodes}
-        onClearSelection={clearSelection}
-        onCombineNodes={handleCombineNodes}
-      />
-
       <div className="max-w mx-auto">
         <h1 className="text-4xl font-bold text-center text-indigo-800 mb-8">
           🧮 Equation Game (AST)
         </h1>
 
         <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
-          <div className="flex items-center justify-center space-x-8 text-2xl font-mono">
+          <div className="flex items-center justify-left space-x-8 text-2xl font-mono">
             {/* Left side */}
             <EquationSide
               ast={equation.left}
@@ -71,6 +64,14 @@ export const GameBoard: React.FC = () => {
               onNodeSelect={selectNode}
             />
           </div>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
+          {/* Selection panel */}
+          <SelectionPanel
+            selectedNodes={selectedNodes}
+            onClearSelection={clearSelection}
+            onCombineNodes={handleCombineNodes}
+          />
         </div>
 
         <WinMessage isVisible={gameWon} />

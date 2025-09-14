@@ -1,12 +1,12 @@
-// astUtils.tsx - Utilità per la manipolazione dell'Abstract Syntax Tree
+// Utilities for manipulating the Abstract Syntax Tree
 
-import { ASTNode, Equation, LeafNode } from "@/app/types/AST";
+import { ASTNode, Equation, LeafNode } from "@/app/types/ast";
 
-// Genera un ID univoco
+// GENERATE - unique ID
 export const generateId = (): string =>
   `${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
 
-// Crea un nodo variabile
+// CREATE - variable node
 export const createVariable = (coefficient: number): ASTNode => ({
   type: "variable",
   name: "x",
@@ -14,14 +14,14 @@ export const createVariable = (coefficient: number): ASTNode => ({
   id: generateId(),
 });
 
-// Crea un nodo costante
+// CREATE - costant node
 export const createConstant = (coefficient: number): ASTNode => ({
   type: "constant",
   coefficient,
   id: generateId(),
 });
 
-// Crea un nodo operazione binaria
+// CREATE - Binary operands node
 export const createBinaryOp = (
   operator: "+" | "-",
   left: ASTNode,
@@ -34,7 +34,7 @@ export const createBinaryOp = (
   id: generateId(),
 });
 
-// Clona un nodo AST mantenendo lo stesso ID
+// CLONE - one node of the AST maintaing the same ID
 export const cloneNode = (node: ASTNode): ASTNode => {
   if (node.type === "variable" || node.type === "constant") {
     return { ...node };
@@ -47,7 +47,7 @@ export const cloneNode = (node: ASTNode): ASTNode => {
   }
 };
 
-// Cambia il segno di un nodo
+// CHANGE - sign of a node
 export const changeSign = (node: ASTNode): ASTNode => {
   const cloned = cloneNode(node);
 
@@ -58,7 +58,7 @@ export const changeSign = (node: ASTNode): ASTNode => {
   }
 };
 
-// Trova tutti i nodi foglia (trascinabili) di un AST
+// FIND - every draggable node
 export const getLeafNodes = (node: ASTNode): LeafNode[] => {
   if (node.type === "variable" || node.type === "constant") {
     return [{ node }];
@@ -67,7 +67,7 @@ export const getLeafNodes = (node: ASTNode): LeafNode[] => {
   }
 };
 
-// Rimuove un nodo dall'AST dato il suo path
+// REMOVE - one node of the AST give its path
 export const removeNodeFromAST = (
   ast: ASTNode,
   targetPath: string[]
@@ -98,8 +98,23 @@ export const removeNodeFromAST = (
 };
 
 // TODO: fare in modo di aggiungere anche altre operazioni
-// Aggiunge un nodo all'AST
+// ADD - node to AST
 export const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
   // Strategia semplice: aggiungiamo sempre con un'operazione +
   return createBinaryOp("+", ast, newNode);
+};
+
+// COMBINES - a list of nodes into a single AST with binary operations
+export const combineNodes = (nodes: ASTNode[]): ASTNode => {
+  if (nodes.length === 0) throw new Error("Cannot combine empty node list");
+  if (nodes.length === 1) return nodes[0];
+
+  let result = nodes[0];
+  for (let i = 1; i < nodes.length; i++) {
+    // Alternates between + and - to make the equations more interesting
+    const operator = "+";
+    result = createBinaryOp(operator, result, nodes[i]);
+  }
+
+  return result;
 };

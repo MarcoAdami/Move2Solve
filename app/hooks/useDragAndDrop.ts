@@ -1,9 +1,14 @@
 // hooks/useDragAndDrop.tsx
 "use client";
-import { useState } from 'react';
-import { ASTNode, Side, DraggedNode } from '@/app/types/AST';
-import { useGame } from '@/app/contexts/GameContext';
-import { changeSign, getLeafNodes, addNodeToAST, createBinaryOp } from '@/app/utils/astUtils';
+import { useState } from "react";
+import { ASTNode, Side, DraggedNode } from "@/app/types/ast";
+import { useGame } from "@/app/contexts/GameContext";
+import {
+  changeSign,
+  getLeafNodes,
+  addNodeToAST,
+  createBinaryOp,
+} from "@/app/utils/astUtils";
 
 export const useDragAndDrop = () => {
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
@@ -16,7 +21,7 @@ export const useDragAndDrop = () => {
     side: Side
   ) => {
     setDraggedNode({ node, parentPath: path, side });
-    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.effectAllowed = "move";
   };
 
   const handleDrop = (e: React.DragEvent, targetSide: Side) => {
@@ -47,7 +52,11 @@ export const useDragAndDrop = () => {
     if (remainingNodes.length > 0) {
       newSourceAST = remainingNodes[0].node;
       for (let i = 1; i < remainingNodes.length; i++) {
-        newSourceAST = createBinaryOp('+', newSourceAST, remainingNodes[i].node);
+        newSourceAST = createBinaryOp(
+          "+",
+          newSourceAST,
+          remainingNodes[i].node
+        );
       }
     }
 

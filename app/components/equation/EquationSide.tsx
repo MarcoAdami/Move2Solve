@@ -1,7 +1,7 @@
 // EquationSide.tsx - Component for the sides of the equation (Updated)
 
 import React from "react";
-import { ASTNode, Side } from "@/app/types/AST";
+import { ASTNode, Side } from "@/app/types/ast";
 import { ASTNodeComponent } from "./ASTNodeComponents";
 
 interface EquationSideProps {

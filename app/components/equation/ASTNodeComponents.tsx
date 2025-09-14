@@ -1,7 +1,7 @@
 // ASTNodeComponent.tsx - Component for rendering AST nodes (Updated)
 
 import React from "react";
-import { ASTNode, Side } from "@/app/types/AST";
+import { ASTNode, Side } from "@/app/types/ast";
 
 interface ASTNodeProps {
   node: ASTNode;
