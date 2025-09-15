@@ -10,11 +10,7 @@ import React, {
 import { Equation } from "@/app/types/ast";
 import { generateEquation } from "@/app/utils/equationUtils";
 import { checkWin } from "@/app/components/GameLogic";
-
-interface GameSettings {
-  variablesCount: number;
-  constantsCount: number;
-}
+import { GameSettings } from "../types/game";
 
 interface GameContextType {
   equation: Equation | null;

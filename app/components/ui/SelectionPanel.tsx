@@ -2,7 +2,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ASTNode, Side } from "@/app/types/ast";
-import { SelectedNode } from "@/app/contexts/SelectionContext";
+import { SelectedNode } from "@/app/types/ast";
 
 interface SelectionPanelProps {
   selectedNodes: SelectedNode[];

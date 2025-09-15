@@ -26,8 +26,7 @@ export const GameBoard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
       {/* Settings menu */}
       <SettingsMenu
-        variablesCount={settings.variablesCount}
-        constantsCount={settings.constantsCount}
+        settings = {settings}
         onVariablesChange={(count) => updateSettings({ variablesCount: count })}
         onConstantsChange={(count) => updateSettings({ constantsCount: count })}
       />

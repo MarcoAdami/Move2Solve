@@ -2,11 +2,7 @@
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { ASTNode, Side } from "@/app/types/ast";
-
-export interface SelectedNode {
-  node: ASTNode;
-  side: Side;
-}
+import { SelectedNode } from "@/app/types/ast";
 
 interface SelectionContextType {
   selectedNodes: SelectedNode[];

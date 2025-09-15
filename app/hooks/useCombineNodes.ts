@@ -4,7 +4,6 @@ import { useGame } from "@/app/contexts/GameContext";
 import { useSelection } from "@/app/contexts/SelectionContext";
 import { ASTNode } from "@/app/types/ast";
 import { getLeafNodes, createBinaryOp } from "@/app/utils/astUtils";
-import { SelectedNode } from "@/app/contexts/SelectionContext";
 
 export const useCombineNodes = () => {
   const { equation, setEquation } = useGame();

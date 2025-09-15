@@ -1,17 +1,16 @@
 // SettingsMenu.tsx - Settings menu with sliders
 
 import React, { useState, useRef, useEffect } from 'react';
+import { GameSettings } from '../types/game';
 
-interface SettingsMenuProps {
-  variablesCount: number;
-  constantsCount: number;
+interface SettingsMenuProps{
+  settings: GameSettings;
   onVariablesChange: (count: number) => void;
   onConstantsChange: (count: number) => void;
 }
 
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
-  variablesCount,
-  constantsCount,
+  settings,
   onVariablesChange,
   onConstantsChange
 }) => {
@@ -56,13 +55,13 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           {/* Slider for variables */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-600 mb-2">
-              Numero di Variabili: <span className="font-bold text-purple-600">{variablesCount}</span>
+              Numero di Variabili: <span className="font-bold text-purple-600">{settings.variablesCount}</span>
             </label>
             <input
               type="range"
               min="1"
               max="10"
-              value={variablesCount}
+              value={settings.variablesCount}
               onChange={(e) => onVariablesChange(parseInt(e.target.value))}
               className="w-full h-2 bg-purple-200 rounded-lg appearance-none cursor-pointer slider-purple"
             />
@@ -71,13 +70,13 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           {/* Slider for constants */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600 mb-2">
-              Numero di Costanti: <span className="font-bold text-yellow-600">{constantsCount}</span>
+              Numero di Costanti: <span className="font-bold text-yellow-600">{settings.constantsCount}</span>
             </label>
             <input
               type="range"
               min="1"
               max="10"
-              value={constantsCount}
+              value={settings.constantsCount}
               onChange={(e) => onConstantsChange(parseInt(e.target.value))}
               className="w-full h-2 bg-yellow-200 rounded-lg appearance-none cursor-pointer slider-yellow"
             />
