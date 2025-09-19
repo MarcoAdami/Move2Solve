@@ -1,6 +1,6 @@
 // Utilities for manipulating the Abstract Syntax Tree
 
-import { ASTNode, Equation, LeafNode } from "@/app/types/ast";
+import { ASTNode } from "@/app/types/ast";
 
 // GENERATE - unique ID
 export const generateId = (): string =>
@@ -59,9 +59,9 @@ export const changeSign = (node: ASTNode): ASTNode => {
 };
 
 // FIND - every draggable node
-export const getLeafNodes = (node: ASTNode): LeafNode[] => {
+export const getLeafNodes = (node: ASTNode): ASTNode[] => {
   if (node.type === "variable" || node.type === "constant") {
-    return [{ node }];
+    return [node];
   } else {
     return [...getLeafNodes(node.left), ...getLeafNodes(node.right)];
   }
@@ -81,8 +81,7 @@ export const combineNodes = (nodes: ASTNode[]): ASTNode => {
 
   let result = nodes[0];
   for (let i = 1; i < nodes.length; i++) {
-    // Alternates between + and - to make the equations more interesting
-    const operator = "+";
+    const operator = i % 2 === 0 ? "+" : "-";
     result = createBinaryOp(operator, result, nodes[i]);
   }
 

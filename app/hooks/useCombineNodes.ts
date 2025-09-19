@@ -20,16 +20,16 @@ export const useCombineNodes = () => {
     const leafNodes = getLeafNodes(targetAST);
     const selectedIds = selectedNodes.map((s) => s.node.id);
     const remainingNodes = leafNodes.filter(
-      (leaf) => !selectedIds.includes(leaf.node.id)
+      (leaf) => !selectedIds.includes(leaf.id)
     );
 
     let newAST: ASTNode;
     if (remainingNodes.length === 0) {
       newAST = resultNode;
     } else {
-      newAST = remainingNodes[0].node;
+      newAST = remainingNodes[0];
       for (let i = 1; i < remainingNodes.length; i++) {
-        newAST = createBinaryOp("+", newAST, remainingNodes[i].node);
+        newAST = createBinaryOp("+", newAST, remainingNodes[i]);
       }
       newAST = createBinaryOp("+", newAST, resultNode);
     }

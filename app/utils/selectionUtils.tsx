@@ -1,6 +1,21 @@
 import { ASTNode, SelectedNode } from "../types/ast";
 import { generateId } from "./astUtils";
 
+
+// Helper function to check if a node is selected
+export const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean => {
+  return selectedIds.includes(node.id);
+};
+
+// Helper function to get all node IDs in the AST
+export const getAllNodeIds = (node: ASTNode): string[] => {
+  if (node.type === "variable" || node.type === "constant") {
+    return [node.id];
+  }else {
+    return [node.id, ...getAllNodeIds(node.left), ...getAllNodeIds(node.right)];
+  }
+};
+
 // Calculates the correct result of the operation
 export const calculateCorrectResult = (
   selectedNodes: SelectedNode[]
@@ -65,44 +80,6 @@ export const validateUserInput = (input: string, selectedNodes: SelectedNode[]):
   }
 };
 
-//render selected node for proper display
-export const renderSelectedNode = (
-  selectedNode: SelectedNode,
-  index: number
-) => {
-  const { node, side } = selectedNode;
-  let display = "";
-  let bgColor = "";
-
-  if (node.type === "variable") {
-    const coeff = node.coefficient;
-    if (coeff === 1) {
-      display = "x";
-    } else if (coeff === -1) {
-      display = "-x";
-    } else {
-      display = `${coeff}x`;
-    }
-    bgColor = "bg-purple-200 border-purple-400";
-  } else if (node.type === "constant") {
-    display = `${node.coefficient}`;
-    bgColor = "bg-yellow-200 border-yellow-400";
-  }
-
-  // const sideColor = side === "left" ? "text-blue-600" : "text-green-600";
-  // const sideText = side === "left" ? "SX" : "DX";
-
-  return (
-    <div key={`${node.id}-${index}`} className="flex items-center space-x-2">
-      <span
-        className={`${bgColor} px-2 py-1 rounded border text-sm font-medium`}
-      >
-        {display}
-      </span>
-      {/* <span className={`text-xs ${sideColor} font-medium`}>({sideText})</span> */}
-    </div>
-  );
-};
 
 
 // Creates the result node

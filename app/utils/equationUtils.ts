@@ -67,17 +67,6 @@ export const generateEquation = (params?: EquationParams): Equation => {
     const j = Math.floor(Math.random() * (i + 1));
     [rightNodes[i], rightNodes[j]] = [rightNodes[j], rightNodes[i]];
   }
-
-  // Combines the nodes into an AST
-  if (leftNodes.length === 0) {
-    leftNodes.push(rightNodes[rightNodes.length - 1]);
-    rightNodes.pop();
-  }
-
-  if (rightNodes.length === 0) {
-    rightNodes.push(rightNodes[rightNodes.length - 1]);
-    leftNodes.pop();
-  }
   const leftSide = combineNodes(leftNodes);
   const rightSide = combineNodes(rightNodes);
 

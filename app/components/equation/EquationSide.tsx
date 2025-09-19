@@ -3,6 +3,7 @@
 import React from "react";
 import { ASTNode, Side } from "@/app/types/ast";
 import { ASTNodeComponent } from "./ASTNodeComponents";
+import { getAllNodeIds, isNodeSelected } from "@/app/utils/selectionUtils";
 
 interface EquationSideProps {
   ast: ASTNode;
@@ -19,19 +20,7 @@ interface EquationSideProps {
   onNodeSelect?: (node: ASTNode, side: Side) => void;
 }
 
-// Helper function to check if a node is selected
-const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean => {
-  return selectedIds.includes(node.id);
-};
 
-// Helper function to get all node IDs in the AST
-const getAllNodeIds = (node: ASTNode): string[] => {
-  if (node.type === "variable" || node.type === "constant") {
-    return [node.id];
-  } else {
-    return [node.id, ...getAllNodeIds(node.left), ...getAllNodeIds(node.right)];
-  }
-};
 
 export const EquationSide: React.FC<EquationSideProps> = ({
   ast,

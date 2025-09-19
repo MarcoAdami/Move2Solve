@@ -45,18 +45,18 @@ export const useDragAndDrop = () => {
     // Recreate the equation by removing and adding
     const leafNodes = getLeafNodes(sourceAST);
     const remainingNodes = leafNodes.filter(
-      (leaf) => leaf.node.id !== draggedNode.node.id
+      (leaf) => leaf.id !== draggedNode.node.id
     );
 
     //FIXME: 
     let newSourceAST: ASTNode | null = null;
     if (remainingNodes.length > 0) {
-      newSourceAST = remainingNodes[0].node;
+      newSourceAST = remainingNodes[0];
       for (let i = 1; i < remainingNodes.length; i++) {
         newSourceAST = createBinaryOp(
           "+",
           newSourceAST,
-          remainingNodes[i].node
+          remainingNodes[i]
         );
       }
     }

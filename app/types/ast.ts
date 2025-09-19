@@ -38,11 +38,3 @@ export interface SelectedNode {
   node: ASTNode;
   side: Side;
 }
-
-/**
- * Represents a leaf node (variable or constant) found within the AST.
- */
-export interface LeafNode {
-  node: ASTNode;
-}
-
