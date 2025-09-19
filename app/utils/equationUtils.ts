@@ -83,8 +83,3 @@ export const generateEquation = (params?: EquationParams): Equation => {
 
   return { left: leftSide, right: rightSide };
 };
-
-// Keeps the original function for compatibility
-export const generateSimpleEquation = (): Equation => {
-  return generateEquation({ variablesCount: 1, constantsCount: 1 });
-};

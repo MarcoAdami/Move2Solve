@@ -35,7 +35,7 @@ export const createBinaryOp = (
 });
 
 // CLONE - one node of the AST maintaing the same ID
-export const cloneNode = (node: ASTNode): ASTNode => {
+const cloneNode = (node: ASTNode): ASTNode => {
   if (node.type === "variable" || node.type === "constant") {
     return { ...node };
   } else {
@@ -65,36 +65,6 @@ export const getLeafNodes = (node: ASTNode): LeafNode[] => {
   } else {
     return [...getLeafNodes(node.left), ...getLeafNodes(node.right)];
   }
-};
-
-// REMOVE - one node of the AST give its path
-export const removeNodeFromAST = (
-  ast: ASTNode,
-  targetPath: string[]
-): ASTNode | null => {
-  if (targetPath.length === 0) return null;
-
-  if (targetPath.length === 1) {
-    // Siamo al penultimo livello
-    if (ast.type === "binary_op") {
-      const direction = targetPath[0] as "left" | "right";
-      const otherDirection = direction === "left" ? "right" : "left";
-      return ast[otherDirection];
-    }
-  }
-
-  if (ast.type === "binary_op") {
-    const [first, ...rest] = targetPath;
-    if (first === "left") {
-      const newLeft = removeNodeFromAST(ast.left, rest);
-      return newLeft ? { ...ast, left: newLeft } : ast.right;
-    } else {
-      const newRight = removeNodeFromAST(ast.right, rest);
-      return newRight ? { ...ast, right: newRight } : ast.left;
-    }
-  }
-
-  return ast;
 };
 
 // TODO: fare in modo di aggiungere anche altre operazioni

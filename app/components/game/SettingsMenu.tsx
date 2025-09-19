@@ -1,7 +1,7 @@
 // SettingsMenu.tsx - Settings menu with sliders
 
 import React, { useState, useRef, useEffect } from 'react';
-import { GameSettings } from '../types/game';
+import { GameSettings } from '@/app/types/game';
 
 interface SettingsMenuProps{
   settings: GameSettings;

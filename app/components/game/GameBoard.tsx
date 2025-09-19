@@ -9,9 +9,9 @@ import { useCombineNodes } from "@/app/hooks/useCombineNodes";
 // Import components
 import { EquationSide } from "@/app/components/equation/EquationSide";
 import { WinMessage } from "@/app/components/ui/WinMessage";
-import { GameInstructions } from "@/app/components/GameInstructions";
+import { GameInstructions } from "@/app/components/ui/GameInstructions";
 import { DebugPanel } from "@/app/components/ui/DebugPanel";
-import { SettingsMenu } from "@/app/components/SettingsMenu";
+import { SettingsMenu } from "@/app/components/game/SettingsMenu";
 import { SelectionPanel } from "@/app/components/ui/SelectionPanel";
 
 export const GameBoard: React.FC = () => {

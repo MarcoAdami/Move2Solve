@@ -48,6 +48,7 @@ export const useDragAndDrop = () => {
       (leaf) => leaf.node.id !== draggedNode.node.id
     );
 
+    //FIXME: 
     let newSourceAST: ASTNode | null = null;
     if (remainingNodes.length > 0) {
       newSourceAST = remainingNodes[0].node;

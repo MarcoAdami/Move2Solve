@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { Equation } from "@/app/types/ast";
 import { generateEquation } from "@/app/utils/equationUtils";
-import { checkWin } from "@/app/components/GameLogic";
+import { checkWin } from "@/app/utils/gameUtils";
 import { GameSettings } from "../types/game";
 
 interface GameContextType {
@@ -38,7 +38,7 @@ export const GameProvider: React.FC<{ children: ReactNode }> = ({
     if (!equation) {
       setEquation(generateEquation(settings));
     }
-  }, [settings]);
+  }, []);
 
   // Check for win condition whenever equation changes
   useEffect(() => {
