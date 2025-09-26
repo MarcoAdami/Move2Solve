@@ -6,7 +6,6 @@ import { useGame } from "@/app/contexts/GameContext";
 import {
   changeSign,
   getLeafNodes,
-  addNodeToAST,
   combineNodes,
 } from "@/app/utils/astUtils";
 

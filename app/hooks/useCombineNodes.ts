@@ -2,7 +2,7 @@
 "use client";
 import { useGame } from "@/app/contexts/GameContext";
 import { useSelection } from "@/app/contexts/SelectionContext";
-import { ASTNode, LeafNode } from "@/app/types/ast";
+import { ASTNode} from "@/app/types/ast";
 import { getLeafNodes, combineNodes } from "@/app/utils/astUtils";
 import { createResultNode } from "../utils/selectionUtils"; // Cambiato da calculateCorrectResult
 
@@ -34,7 +34,7 @@ export const useCombineNodes = () => {
       throw new Error("Unable to create result node");
     }
     
-    let newAST: ASTNode = combineNodes([...remainingNodes, resultNode]);
+    const newAST: ASTNode = combineNodes([...remainingNodes, resultNode]);
 
     // Update the equation
     setEquation({

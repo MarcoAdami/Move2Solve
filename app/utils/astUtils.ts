@@ -1,6 +1,6 @@
 // Utilities for manipulating the Abstract Syntax Tree
 
-import { ASTNode, LeafNode } from "@/app/types/ast";
+import { ASTNode} from "@/app/types/ast";
 
 // GENERATE - unique ID
 export const generateId = (): string =>
