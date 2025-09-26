@@ -1,6 +1,6 @@
 // Utilities for manipulating the Abstract Syntax Tree
 
-import { ASTNode } from "@/app/types/ast";
+import { ASTNode, LeafNode } from "@/app/types/ast";
 
 // GENERATE - unique ID
 export const generateId = (): string =>
@@ -22,8 +22,8 @@ export const createConstant = (coefficient: number): ASTNode => ({
 });
 
 // CREATE - Binary operands node
-export const createBinaryOp = (
-  operator: "+" | "-",
+const createBinaryOp = (
+  operator: "+",
   left: ASTNode,
   right: ASTNode
 ): ASTNode => ({
@@ -76,14 +76,35 @@ export const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
 
 // COMBINES - a list of nodes into a single AST with binary operations
 export const combineNodes = (nodes: ASTNode[]): ASTNode => {
+  //FIXME: try to control better this error
   if (nodes.length === 0) throw new Error("Cannot combine empty node list");
   if (nodes.length === 1) return nodes[0];
 
-  let result = nodes[0];
-  for (let i = 1; i < nodes.length; i++) {
-    const operator = i % 2 === 0 ? "+" : "-";
-    result = createBinaryOp(operator, result, nodes[i]);
+  const operator = "+";
+  let remainder: ASTNode;
+
+  while (nodes.length != 1) {
+    if(nodes.length % 2 == 1){
+      let last1 = nodes.pop();
+      let last2 = nodes.pop();
+      if (last1 === undefined || last2 === undefined) {
+        throw new Error();
+      }
+      nodes.push(addNodeToAST(last2, last1));
+    }
+    let size = nodes.length;
+    console.log(size);
+    
+    for (let index = 0; index < size; index += 2) {
+      let first = nodes.shift();
+      let second = nodes.shift();
+
+      if (first === undefined || second === undefined) {
+        throw new Error();
+      }
+      nodes.push(addNodeToAST(first, second));
+    }
   }
 
-  return result;
+  return nodes[0];
 };

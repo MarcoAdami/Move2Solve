@@ -3,14 +3,10 @@ import { Equation, ASTNode } from "@/app/types/ast";
 import {
   createVariable,
   createConstant,
-  createBinaryOp,
   combineNodes,
 } from "@/app/utils/astUtils";
 
-interface EquationParams {
-  variablesCount: number;
-  constantsCount: number;
-}
+import { GameSettings } from "../types/game";
 
 // Generates a list of random nodes
 const generateRandomNodes = (
@@ -37,7 +33,7 @@ const generateRandomNodes = (
 };
 
 // Generates a new random equation with customizable parameters
-export const generateEquation = (params?: EquationParams): Equation => {
+export const generateEquation = (params?: GameSettings): Equation => {
   const { variablesCount = 1, constantsCount = 1 } = params || {};
 
   const alpha = Math.floor(Math.random() * variablesCount);

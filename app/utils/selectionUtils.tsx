@@ -1,12 +1,13 @@
 import { ASTNode, SelectedNode } from "../types/ast";
 import { generateId } from "./astUtils";
 
-
+//REVIEW - find a better file for this utils
 // Helper function to check if a node is selected
 export const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean => {
   return selectedIds.includes(node.id);
 };
 
+//REVIEW - find a better file for this utils
 // Helper function to get all node IDs in the AST
 export const getAllNodeIds = (node: ASTNode): string[] => {
   if (node.type === "variable" || node.type === "constant") {

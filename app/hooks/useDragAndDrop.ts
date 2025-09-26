@@ -7,7 +7,7 @@ import {
   changeSign,
   getLeafNodes,
   addNodeToAST,
-  createBinaryOp,
+  combineNodes,
 } from "@/app/utils/astUtils";
 
 export const useDragAndDrop = () => {
@@ -48,22 +48,16 @@ export const useDragAndDrop = () => {
       (leaf) => leaf.id !== draggedNode.node.id
     );
 
-    //FIXME: 
     let newSourceAST: ASTNode | null = null;
     if (remainingNodes.length > 0) {
-      newSourceAST = remainingNodes[0];
-      for (let i = 1; i < remainingNodes.length; i++) {
-        newSourceAST = createBinaryOp(
-          "+",
-          newSourceAST,
-          remainingNodes[i]
-        );
-      }
+      newSourceAST = combineNodes(remainingNodes);
     }
 
     // Add the node to the target side
     const targetAST = equation[targetSide];
-    const newTargetAST = addNodeToAST(targetAST, nodeWithChangedSign);
+
+    //Return list of the new side updated with the other node
+    const newTargetAST = combineNodes([...getLeafNodes(targetAST), nodeWithChangedSign]);
 
     // Update the equation
     if (newSourceAST) {
