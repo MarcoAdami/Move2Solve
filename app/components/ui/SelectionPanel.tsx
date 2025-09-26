@@ -39,6 +39,7 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
     if (e.key === "Enter") {
       if (validateUserInput(userInput, selectedNodes)) {
         const resultNode = createResultNode(selectedNodes);
+        //REVIEW: I think onCombineNodes can be removed from if
         if (resultNode && onCombineNodes) {
           setFeedback({
             type: "success",

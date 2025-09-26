@@ -4,7 +4,7 @@ import { useGame } from "@/app/contexts/GameContext";
 import { useSelection } from "@/app/contexts/SelectionContext";
 import { ASTNode, LeafNode } from "@/app/types/ast";
 import { getLeafNodes, combineNodes } from "@/app/utils/astUtils";
-import { calculateCorrectResult } from "../utils/selectionUtils";
+import { createResultNode } from "../utils/selectionUtils"; // Cambiato da calculateCorrectResult
 
 export const useCombineNodes = () => {
   const { equation, setEquation } = useGame();
@@ -23,20 +23,17 @@ export const useCombineNodes = () => {
     //Get the id of the selected nodes
     const selectedIds = selectedNodes.map((s) => s.node.id);
 
-    //Parse the remaining nodes and do not inlcude the selected ones
+    //Parse the remaining nodes and do not include the selected ones
     const remainingNodes = leafNodes.filter(
       (leaf) => !selectedIds.includes(leaf.id)
     );
 
-    //Calculate the result of selected nodes
-    const resultNode = calculateCorrectResult(selectedNodes);
-    if (resultNode === undefined || resultNode === null) {
-      throw new Error();
+    //Calculate the result of selected nodes using createResultNode
+    const resultNode = createResultNode(selectedNodes);
+    if (resultNode === null) {
+      throw new Error("Unable to create result node");
     }
-    remainingNodes.forEach(node => {if(!(node as LeafNode)){
-      throw new Error;
-    }});
-    // @ts-expect-error this line gives me a warning that is useless in my opinion
+    
     let newAST: ASTNode = combineNodes([...remainingNodes, resultNode]);
 
     // Update the equation

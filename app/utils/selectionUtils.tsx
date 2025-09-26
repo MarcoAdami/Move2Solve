@@ -88,18 +88,18 @@ export const createResultNode = (selectedNodes: SelectedNode[]): ASTNode | null 
     const correctResult = calculateCorrectResult(selectedNodes);
     if (!correctResult) return null;
 
-    if (correctResult.type === "variable") {
+    if (correctResult.type === 'variable') {
       return {
-        type: "variable",
+        type: 'variable',
         name: "x",
         coefficient: correctResult.value,
         id: generateId(),
       };
     } else {
       return {
-        type: "constant",
+        type: 'constant',
         coefficient: correctResult.value,
         id: generateId(),
       };
     }
-  };
+};

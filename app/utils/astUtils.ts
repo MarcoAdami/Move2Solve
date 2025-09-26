@@ -34,7 +34,7 @@ const createBinaryOp = (
   id: generateId(),
 });
 
-// CLONE - one node of the AST maintaing the same ID
+// CLONE - one node of the AST maintaining the same ID
 const cloneNode = (node: ASTNode): ASTNode => {
   if (node.type === "variable" || node.type === "constant") {
     return { ...node };
@@ -67,7 +67,6 @@ export const getLeafNodes = (node: ASTNode): ASTNode[] => {
   }
 };
 
-// TODO: fare in modo di aggiungere anche altre operazioni
 // ADD - node to AST
 export const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
   // Strategia semplice: aggiungiamo sempre con un'operazione +
@@ -76,35 +75,35 @@ export const addNodeToAST = (ast: ASTNode, newNode: ASTNode): ASTNode => {
 
 // COMBINES - a list of nodes into a single AST with binary operations
 export const combineNodes = (nodes: ASTNode[]): ASTNode => {
-  //FIXME: try to control better this error
   if (nodes.length === 0) throw new Error("Cannot combine empty node list");
   if (nodes.length === 1) return nodes[0];
 
-  const operator = "+";
-  let remainder: ASTNode;
+  // Creiamo una copia dell'array per non modificare l'originale
+  let workingNodes = [...nodes];
 
-  while (nodes.length != 1) {
-    if(nodes.length % 2 == 1){
-      let last1 = nodes.pop();
-      let last2 = nodes.pop();
+  while (workingNodes.length > 1) {
+    // Se abbiamo un numero dispari di nodi, combiniamo gli ultimi due
+    if (workingNodes.length % 2 === 1) {
+      const last1 = workingNodes.pop();
+      const last2 = workingNodes.pop();
       if (last1 === undefined || last2 === undefined) {
-        throw new Error();
+        throw new Error("Unexpected undefined node");
       }
-      nodes.push(addNodeToAST(last2, last1));
+      workingNodes.push(addNodeToAST(last2, last1));
     }
-    let size = nodes.length;
-    console.log(size);
     
-    for (let index = 0; index < size; index += 2) {
-      let first = nodes.shift();
-      let second = nodes.shift();
-
+    // Ora abbiamo un numero pari di nodi
+    const newNodes: ASTNode[] = [];
+    for (let i = 0; i < workingNodes.length; i += 2) {
+      const first = workingNodes[i];
+      const second = workingNodes[i + 1];
       if (first === undefined || second === undefined) {
-        throw new Error();
+        throw new Error("Unexpected undefined node");
       }
-      nodes.push(addNodeToAST(first, second));
+      newNodes.push(addNodeToAST(first, second));
     }
+    workingNodes = newNodes;
   }
 
-  return nodes[0];
+  return workingNodes[0];
 };
