@@ -1,8 +1,8 @@
 // contexts/SelectionContext.tsx
 "use client";
 import React, { createContext, useContext, useState, ReactNode } from "react";
-import { ASTNode, Side } from "@/app/types/ast";
-import { SelectedNode } from "@/app/types/ast";
+import { ASTNode, Side } from "@/src/types/ast";
+import { SelectedNode } from "@/src/types/ast";
 
 interface SelectionContextType {
   selectedNodes: SelectedNode[];

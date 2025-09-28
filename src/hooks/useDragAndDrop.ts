@@ -1,13 +1,9 @@
 // hooks/useDragAndDrop.tsx
 "use client";
 import { useState } from "react";
-import { ASTNode, Side, DraggedNode } from "@/app/types/ast";
-import { useGame } from "@/app/contexts/GameContext";
-import {
-  changeSign,
-  getLeafNodes,
-  combineNodes,
-} from "@/app/utils/astUtils";
+import { ASTNode, Side, DraggedNode } from "@/src/types/ast";
+import { useGame } from "@/src/contexts/GameContext";
+import { changeSign, getLeafNodes, combineNodes } from "@/src/utils/astUtils";
 
 export const useDragAndDrop = () => {
   const [draggedNode, setDraggedNode] = useState<DraggedNode | null>(null);
@@ -56,7 +52,10 @@ export const useDragAndDrop = () => {
     const targetAST = equation[targetSide];
 
     //Return list of the new side updated with the other node
-    const newTargetAST = combineNodes([...getLeafNodes(targetAST), nodeWithChangedSign]);
+    const newTargetAST = combineNodes([
+      ...getLeafNodes(targetAST),
+      nodeWithChangedSign,
+    ]);
 
     // Update the equation
     if (newSourceAST) {

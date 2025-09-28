@@ -1,6 +1,6 @@
 // Utilities for manipulating the Abstract Syntax Tree
 
-import { ASTNode} from "@/app/types/ast";
+import { ASTNode } from "@/src/types/ast";
 
 // GENERATE - unique ID
 export const generateId = (): string =>
@@ -91,7 +91,7 @@ export const combineNodes = (nodes: ASTNode[]): ASTNode => {
       }
       workingNodes.push(addNodeToAST(last2, last1));
     }
-    
+
     // Ora abbiamo un numero pari di nodi
     const newNodes: ASTNode[] = [];
     for (let i = 0; i < workingNodes.length; i += 2) {

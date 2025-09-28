@@ -1,9 +1,9 @@
 // hooks/useCombineNodes.tsx
 "use client";
-import { useGame } from "@/app/contexts/GameContext";
-import { useSelection } from "@/app/contexts/SelectionContext";
-import { ASTNode} from "@/app/types/ast";
-import { getLeafNodes, combineNodes } from "@/app/utils/astUtils";
+import { useGame } from "@/src/contexts/GameContext";
+import { useSelection } from "@/src/contexts/SelectionContext";
+import { ASTNode } from "@/src/types/ast";
+import { getLeafNodes, combineNodes } from "@/src/utils/astUtils";
 import { createResultNode } from "../utils/selectionUtils"; // Cambiato da calculateCorrectResult
 
 export const useCombineNodes = () => {
@@ -33,7 +33,7 @@ export const useCombineNodes = () => {
     if (resultNode === null) {
       throw new Error("Unable to create result node");
     }
-    
+
     const newAST: ASTNode = combineNodes([...remainingNodes, resultNode]);
 
     // Update the equation

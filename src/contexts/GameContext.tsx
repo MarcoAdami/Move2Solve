@@ -7,9 +7,9 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { Equation } from "@/app/types/ast";
-import { generateEquation } from "@/app/utils/equationUtils";
-import { checkWin } from "@/app/utils/gameUtils";
+import { Equation } from "@/src/types/ast";
+import { generateEquation } from "@/src/utils/equationUtils";
+import { checkWin } from "@/src/utils/gameUtils";
 import { GameSettings } from "../types/game";
 
 interface GameContextType {

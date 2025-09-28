@@ -3,7 +3,10 @@ import { generateId } from "./astUtils";
 
 //REVIEW - find a better file for this utils
 // Helper function to check if a node is selected
-export const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean => {
+export const isNodeSelected = (
+  node: ASTNode,
+  selectedIds: string[]
+): boolean => {
   return selectedIds.includes(node.id);
 };
 
@@ -12,7 +15,7 @@ export const isNodeSelected = (node: ASTNode, selectedIds: string[]): boolean =>
 export const getAllNodeIds = (node: ASTNode): string[] => {
   if (node.type === "variable" || node.type === "constant") {
     return [node.id];
-  }else {
+  } else {
     return [node.id, ...getAllNodeIds(node.left), ...getAllNodeIds(node.right)];
   }
 };
@@ -50,7 +53,10 @@ export const calculateCorrectResult = (
 };
 
 // Check user input
-export const validateUserInput = (input: string, selectedNodes: SelectedNode[]): boolean => {
+export const validateUserInput = (
+  input: string,
+  selectedNodes: SelectedNode[]
+): boolean => {
   const correctResult = calculateCorrectResult(selectedNodes);
   if (!correctResult) return false;
 
@@ -81,25 +87,25 @@ export const validateUserInput = (input: string, selectedNodes: SelectedNode[]):
   }
 };
 
-
-
 // Creates the result node
-export const createResultNode = (selectedNodes: SelectedNode[]): ASTNode | null => {
-    const correctResult = calculateCorrectResult(selectedNodes);
-    if (!correctResult) return null;
+export const createResultNode = (
+  selectedNodes: SelectedNode[]
+): ASTNode | null => {
+  const correctResult = calculateCorrectResult(selectedNodes);
+  if (!correctResult) return null;
 
-    if (correctResult.type === 'variable') {
-      return {
-        type: 'variable',
-        name: "x",
-        coefficient: correctResult.value,
-        id: generateId(),
-      };
-    } else {
-      return {
-        type: 'constant',
-        coefficient: correctResult.value,
-        id: generateId(),
-      };
-    }
+  if (correctResult.type === "variable") {
+    return {
+      type: "variable",
+      name: "x",
+      coefficient: correctResult.value,
+      id: generateId(),
+    };
+  } else {
+    return {
+      type: "constant",
+      coefficient: correctResult.value,
+      id: generateId(),
+    };
+  }
 };

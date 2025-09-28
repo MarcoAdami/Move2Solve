@@ -1,8 +1,11 @@
 // components/SelectionPanel.tsx
 "use client";
 import React, { useState, useEffect } from "react";
-import { ASTNode, SelectedNode} from "@/app/types/ast";
-import { createResultNode, validateUserInput } from "@/app/utils/selectionUtils";
+import { ASTNode, SelectedNode } from "@/src/types/ast";
+import {
+  createResultNode,
+  validateUserInput,
+} from "@/src/utils/selectionUtils";
 import { RenderSelectedNode } from "./RenderSelectedNode";
 
 interface SelectionPanelProps {
@@ -31,8 +34,6 @@ export const SelectionPanel: React.FC<SelectionPanelProps> = ({
 
   // if (selectedNodes.length === 0) return null;
 
-
-  
   // Handles the Enter key press
   //REVIEW:  there is no space to show it, meaningfull for feedback
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

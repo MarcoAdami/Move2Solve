@@ -1,9 +1,9 @@
 // EquationSide.tsx - Component for the sides of the equation (Updated)
 
 import React from "react";
-import { ASTNode, Side } from "@/app/types/ast";
+import { ASTNode, Side } from "@/src/types/ast";
 import { ASTNodeComponent } from "./ASTNodeComponents";
-import { getAllNodeIds, isNodeSelected } from "@/app/utils/selectionUtils";
+import { getAllNodeIds, isNodeSelected } from "@/src/utils/selectionUtils";
 
 interface EquationSideProps {
   ast: ASTNode;
@@ -19,8 +19,6 @@ interface EquationSideProps {
   ) => void;
   onNodeSelect?: (node: ASTNode, side: Side) => void;
 }
-
-
 
 export const EquationSide: React.FC<EquationSideProps> = ({
   ast,

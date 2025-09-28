@@ -1,9 +1,9 @@
 // SettingsMenu.tsx - Settings menu with sliders
 
-import React, { useState, useRef, useEffect } from 'react';
-import { GameSettings } from '@/app/types/game';
+import React, { useState, useRef, useEffect } from "react";
+import { GameSettings } from "@/src/types/game";
 
-interface SettingsMenuProps{
+interface SettingsMenuProps {
   settings: GameSettings;
   onVariablesChange: (count: number) => void;
   onConstantsChange: (count: number) => void;
@@ -12,7 +12,7 @@ interface SettingsMenuProps{
 export const SettingsMenu: React.FC<SettingsMenuProps> = ({
   settings,
   onVariablesChange,
-  onConstantsChange
+  onConstantsChange,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -26,11 +26,11 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen]);
 
@@ -41,21 +41,41 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className="bg-indigo-600 hover:bg-indigo-700 text-white p-3 rounded-full shadow-lg transition-colors"
       >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        <svg
+          className="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+          />
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+          />
         </svg>
       </button>
 
       {/* Dropdown menu */}
       {isOpen && (
         <div className="absolute top-full right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 p-6 min-w-80">
-          <h3 className="text-lg font-semibold text-gray-700 mb-4">Impostazioni Equazione</h3>
-          
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Impostazioni Equazione
+          </h3>
+
           {/* Slider for variables */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-600 mb-2">
-              Numero di Variabili: <span className="font-bold text-purple-600">{settings.variablesCount}</span>
+              Numero di Variabili:{" "}
+              <span className="font-bold text-purple-600">
+                {settings.variablesCount}
+              </span>
             </label>
             <input
               type="range"
@@ -70,7 +90,10 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           {/* Slider for constants */}
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-600 mb-2">
-              Numero di Costanti: <span className="font-bold text-yellow-600">{settings.constantsCount}</span>
+              Numero di Costanti:{" "}
+              <span className="font-bold text-yellow-600">
+                {settings.constantsCount}
+              </span>
             </label>
             <input
               type="range"
@@ -97,9 +120,9 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           background: #8b5cf6;
           cursor: pointer;
           border: 2px solid white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .slider-yellow::-webkit-slider-thumb {
           appearance: none;
           width: 20px;
@@ -108,9 +131,9 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           background: #eab308;
           cursor: pointer;
           border: 2px solid white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .slider-purple::-moz-range-thumb,
         .slider-yellow::-moz-range-thumb {
           width: 20px;
@@ -118,13 +141,13 @@ export const SettingsMenu: React.FC<SettingsMenuProps> = ({
           border-radius: 50%;
           cursor: pointer;
           border: 2px solid white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         }
-        
+
         .slider-purple::-moz-range-thumb {
           background: #8b5cf6;
         }
-        
+
         .slider-yellow::-moz-range-thumb {
           background: #eab308;
         }

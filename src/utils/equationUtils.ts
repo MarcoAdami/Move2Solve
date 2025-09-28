@@ -1,10 +1,10 @@
 // Utilities for manipulating equations
-import { Equation, ASTNode } from "@/app/types/ast";
+import { Equation, ASTNode } from "@/src/types/ast";
 import {
   createVariable,
   createConstant,
   combineNodes,
-} from "@/app/utils/astUtils";
+} from "@/src/utils/astUtils";
 
 import { GameSettings } from "../types/game";
 

@@ -1,7 +1,7 @@
 // gameLogic.ts - Game control logic
 
-import { Equation } from "@/app/types/ast";
-import { getLeafNodes } from "@/app/utils/astUtils";
+import { Equation } from "@/src/types/ast";
+import { getLeafNodes } from "@/src/utils/astUtils";
 
 // Win: when all sums are solved
 export const checkWin = (equation: Equation): boolean => {

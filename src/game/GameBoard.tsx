@@ -1,18 +1,18 @@
 // components/GameBoard.tsx
 "use client";
 import React from "react";
-import { useGame } from "@/app/contexts/GameContext";
-import { useSelection } from "@/app/contexts/SelectionContext";
-import { useDragAndDrop } from "@/app/hooks/useDragAndDrop";
-import { useCombineNodes } from "@/app/hooks/useCombineNodes";
+import { useGame } from "@/src/contexts/GameContext";
+import { useSelection } from "@/src/contexts/SelectionContext";
+import { useDragAndDrop } from "@/src/hooks/useDragAndDrop";
+import { useCombineNodes } from "@/src/hooks/useCombineNodes";
 
 // Import components
 import { EquationSide } from "@/app/components/equation/EquationSide";
-import { WinMessage } from "@/app/components/ui/WinMessage";
-import { GameInstructions } from "@/app/components/ui/GameInstructions";
-import { DebugPanel } from "@/app/components/ui/DebugPanel";
-import { SettingsMenu } from "@/app/components/game/SettingsMenu";
-import { SelectionPanel } from "@/app/components/ui/SelectionPanel";
+import { WinMessage } from "@/src/ui/WinMessage";
+import { GameInstructions } from "@/src/ui/GameInstructions";
+import { DebugPanel } from "@/src/ui/DebugPanel";
+import { SettingsMenu } from "@/src/game/SettingsMenu";
+import { SelectionPanel } from "@/src/ui/SelectionPanel";
 
 export const GameBoard: React.FC = () => {
   const { equation, gameWon, resetGame, settings, updateSettings } = useGame();
@@ -26,7 +26,7 @@ export const GameBoard: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-8">
       {/* Settings menu */}
       <SettingsMenu
-        settings = {settings}
+        settings={settings}
         onVariablesChange={(count) => updateSettings({ variablesCount: count })}
         onConstantsChange={(count) => updateSettings({ constantsCount: count })}
       />

@@ -1,7 +1,7 @@
 // DebugPanel.tsx - Component for AST debugging
 
 import React from "react";
-import { ASTNode, Equation } from "@/app/types/ast";
+import { ASTNode, Equation } from "@/src/types/ast";
 
 interface DebugPanelProps {
   equation: Equation;

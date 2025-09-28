@@ -1,11 +1,11 @@
 // app/[locale]/page.tsx
 
-import EquationGame from './components/game/EquationGame';
+import EquationGame from "../src/game/EquationGame";
 
 export default function HomePage() {
   return (
-      <main>
-        <EquationGame />
-      </main>
+    <main>
+      <EquationGame />
+    </main>
   );
 }

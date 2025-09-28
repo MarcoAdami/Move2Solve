@@ -1,4 +1,4 @@
-import { SelectedNode } from "@/app/types/ast";
+import { SelectedNode } from "@/src/types/ast";
 
 //render selected node for proper display
 export const RenderSelectedNode = (
