@@ -2,7 +2,7 @@
 An interactive web application designed to help high school students visualize and understand algebraic equation solving through drag-and-drop manipulation. Students can move terms between equation sides, combine like terms, and see real-time visual feedback of their algebraic operations.
 
 ## 🎮 Preview
-[![Equation Solver Game preview](photo/equation-game.png)](https://equation-game.vercel.app/)
+[![Equation Solver Game preview](public/equation-game.png)](https://equation-game.vercel.app/)
 
 ## Key Goals
 - **Drag & Drop Interface**
