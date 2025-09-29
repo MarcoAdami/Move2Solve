@@ -1,18 +1,18 @@
 // components/GameBoard.tsx
 "use client";
 import React from "react";
-import { useGame } from "../contexts/GameContext";
+import { useGame } from "@/src/contexts/GameContext";
 import { useSelection } from "@/src/contexts/SelectionContext";
 import { useDragAndDrop } from "@/src/hooks/useDragAndDrop";
 import { useCombineNodes } from "@/src/hooks/useCombineNodes";
 
 // Import components
-import { EquationSide } from "../components/equation/EquationSide";
-import { WinMessage } from "../components/ui/WinMessage";
-import { GameInstructions } from "../components/ui/GameInstructions";
-import { DebugPanel } from "../components/ui/DebugPanel";
-import { SettingsMenu } from "../components/game/SettingsMenu";
-import { SelectionPanel } from "../components/ui/SelectionPanel";
+import { EquationSide } from "@/src/components/equation/EquationSide";
+import { WinMessage } from "@/src/components/ui/WinMessage";
+import { GameInstructions } from "@/src/components/ui/GameInstructions";
+import { DebugPanel } from "@/src/components/ui/DebugPanel";
+import { SettingsMenu } from "@/src/components/game/SettingsMenu";
+import { SelectionPanel } from "@/src/components/ui/SelectionPanel";
 
 export const GameBoard: React.FC = () => {
   const { equation, gameWon, resetGame, settings, updateSettings } = useGame();

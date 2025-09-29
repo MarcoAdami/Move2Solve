@@ -37,9 +37,6 @@ An interactive web application designed to help high school students visualize a
 - Improve hints and rules
 
 
-> 💡 Dev note: Sometimes I check with AI tools (e.g. [Claude snippet](https://claude.ai/share/ca0bdcae-9f9e-49d9-bd6a-370015f4c5bd)) to validate the approach.  
-
-
 ## 📌 Code Comment Flags
 | Tag        | Meaning                          |
 |------------|----------------------------------|
